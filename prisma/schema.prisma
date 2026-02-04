@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id                   String    @id @default(cuid())
+  shop                 String    @unique
+  accessToken          String?
+  scope                String?
+  apiKeyHash           String?
+  apiKeyPrefix         String?
+  onboardingCompleted  Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@index([shop])
+}
+
+model GdprRequest {
+  id          String    @id @default(cuid())
+  shop        String
+  type        String
+  payload     Json
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([shop])
+  @@index([type])
+}
