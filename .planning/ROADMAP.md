@@ -26,9 +26,9 @@ This roadmap delivers a public Shopify app enabling dimension-based pricing for 
 **Plans:** 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold Remix app, Prisma schema, OAuth config, GDPR webhooks
-- [ ] 01-02-PLAN.md — Dashboard UI with welcome card, API key management, empty state
-- [ ] 01-03-PLAN.md — Database migrations, error handling, end-to-end verification
+- [x] 01-01-PLAN.md — Scaffold Remix app, Prisma schema, OAuth config, GDPR webhooks
+- [x] 01-02-PLAN.md — Dashboard UI with welcome card, API key management, empty state
+- [x] 01-03-PLAN.md — Database migrations, error handling, end-to-end verification
 
 **Success Criteria:**
 1. Merchant can install the app from a development URL via Shopify OAuth
@@ -141,7 +141,7 @@ Plans:
 
 | Phase | Status | Requirements | Completion |
 |-------|--------|--------------|------------|
-| **1. Foundation & Authentication** | Pending | 4 | 0% |
+| **1. Foundation & Authentication** | Complete | 4 | 100% |
 | **2. Admin Matrix Management** | Pending | 6 | 0% |
 | **3. Draft Orders Integration** | Pending | 1 | 0% |
 | **4. Public REST API** | Pending | 4 | 0% |
@@ -149,7 +149,7 @@ Plans:
 | **6. Polish & App Store Preparation** | Pending | 1 | 0% |
 
 **Total Requirements:** 21/21 mapped
-**Overall Progress:** 0% (0/21 requirements complete)
+**Overall Progress:** 19% (4/21 requirements complete)
 
 ---
 
@@ -164,7 +164,7 @@ Plans:
 - No orphaned requirements
 - No requirements duplicated across phases
 
-**Next Step:** Plan Phase 1 via `/gsd:plan-phase 1`
+**Next Step:** Plan Phase 2 via `/gsd:plan-phase 2`
 
 ---
-*Last updated: 2026-02-03*
+*Last updated: 2026-02-04*

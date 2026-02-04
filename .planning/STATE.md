@@ -1,7 +1,7 @@
 # Project State: Shopify Price Matrix App
 
 **Last Updated:** 2026-02-04
-**Status:** In Progress (Phase 1 - Foundation & Authentication)
+**Status:** Phase 1 Complete — Ready for Phase 2
 
 ## Project Reference
 
@@ -9,20 +9,20 @@
 
 **What This Is:** A public Shopify app with three components: (1) embedded admin dashboard for matrix configuration, (2) REST API for headless storefronts to fetch pricing, (3) drop-in React widget for easy integration. Merchants define breakpoint grids (width x height), assign them to products, and customers get real-time dimension-based pricing with checkout via Draft Orders.
 
-**Current Focus:** Executing Phase 1 (Foundation & Authentication). Plans 01-01 and 01-02 complete - Shopify scaffold with OAuth, dashboard with API key management, and welcome card onboarding.
+**Current Focus:** Phase 1 complete. All foundation infrastructure verified. Ready to begin Phase 2 (Admin Matrix Management).
 
 ## Current Position
 
-**Phase:** 1 of 6 (Foundation & Authentication)
-**Plan:** 02 of 3
-**Status:** In progress
-**Last activity:** 2026-02-04 - Completed 01-02-PLAN.md
+**Phase:** 1 of 6 (Foundation & Authentication) — COMPLETE
+**Plan:** 3 of 3
+**Status:** Complete
+**Last activity:** 2026-02-04 - Completed 01-03-PLAN.md, human-verified e2e
 
 **Progress Bar:**
 ```
-[██                  ] 10% (2/21 plans estimated complete)
+[████                ] 15% (3/21 plans estimated complete)
 
-Phase 1: Foundation & Authentication       [████      ] 2/3
+Phase 1: Foundation & Authentication       [██████████] 3/3 ✓
 Phase 2: Admin Matrix Management           [          ] 0/6
 Phase 3: Draft Orders Integration          [          ] 0/1
 Phase 4: Public REST API                   [          ] 0/4
@@ -32,7 +32,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 
 ## Performance Metrics
 
-**Velocity:** 4 min/plan (2 plans completed)
+**Velocity:** 4 min/plan (3 plans completed)
 **Blockers:** 0
 **Active Research:** 0
 
@@ -41,6 +41,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 |-------|------|-----------|----------|--------|
 | 01-foundation-authentication | 01 | 2026-02-04 | 5min | ✓ Complete |
 | 01-foundation-authentication | 02 | 2026-02-04 | 3min | ✓ Complete |
+| 01-foundation-authentication | 03 | 2026-02-04 | 5min | ✓ Complete |
 
 ## Accumulated Context
 
@@ -59,6 +60,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 - **[01-02]** One-time API key viewing: Security best practice (show full key only on generation)
 - **[01-02]** Manual welcome card dismissal: Merchants control when to dismiss (per CONTEXT.md)
 - **[01-02]** pm_ API key prefix: Industry convention for easy identification
+- **[01-03]** Polaris-styled error boundaries in both root.tsx and app.tsx for consistent UX
 
 **Pending:**
 - Matrix size limits (100x100 from research) - validated during Phase 2
@@ -68,7 +70,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 ### Open Todos
 
 **Immediate:**
-- [ ] Run `/gsd:plan-phase 1` to create execution plan for Foundation & Authentication
+- [ ] Plan Phase 2 (Admin Matrix Management) via `/gsd:plan-phase 2`
 
 **Upcoming:**
 - [ ] Research Draft Orders behavior during Phase 3 planning
@@ -76,42 +78,46 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 
 ### Known Blockers
 
-(None - project just initialized)
+(None)
 
 ### Anti-Patterns to Avoid
 
 From research:
 1. Third-party cookies for embedded sessions - use session tokens
 2. Prisma connection exhaustion on Vercel - configure pooling from start
-3. Missing GDPR webhooks - register in Phase 1
+3. Missing GDPR webhooks - register in Phase 1 ✓
 4. Draft Orders rate limits - implement retry logic in Phase 3
 5. API without HMAC verification - design into Phase 4 from start
 
+### Lessons Learned
+
+- **[01-UAT]** Polaris CSS must be explicitly imported via `links` export — AppProvider alone doesn't load styles
+- **[01-UAT]** Root ErrorBoundary needs its own Polaris CSS import since it renders outside the app layout
+
 ## Session Continuity
 
-**Last session:** 2026-02-04 08:27:19 UTC
-**Stopped at:** Completed 01-02-PLAN.md (Dashboard with API key management)
+**Last session:** 2026-02-04
+**Stopped at:** Phase 1 complete, all 3 plans executed and human-verified
 **Resume file:** None
 
 **What Just Happened:**
-- Executed 01-02-PLAN.md (Dashboard with welcome card and API key management)
-- Created API key utilities with SHA-256 hashing and timing-safe comparison
-- Built afterInstall hook for store initialization and reinstall handling
-- Created dashboard UI with Polaris components (welcome card, API key display, empty state)
-- Implemented API key display/copy/regenerate with one-time viewing pattern
-- 2 tasks completed, 2 commits made (29c5987, f5c3865)
+- Completed 01-03-PLAN.md (migrations, error handling, e2e verification)
+- Applied Prisma migrations creating Store and GdprRequest tables
+- Added Polaris-styled ErrorBoundary to both root.tsx and app.tsx
+- Ran UAT: 10 tests, found 6 issues (all from missing Polaris CSS), fixed, re-verified 10/10 pass
+- Human approved full install flow end-to-end
 
 **What Comes Next:**
-- Continue Phase 1 with plan 01-03 (if exists) or move to Phase 2
-- Dashboard layout ready for matrix management UI integration
-- API key infrastructure ready for REST API implementation
+- Phase 2: Admin Matrix Management — create, edit, delete pricing matrices
+- Dashboard layout and empty state CTA ready for matrix creation flow
+- Database tables ready for matrix models (PriceMatrix, Breakpoint, MatrixPrice, ProductMatrix)
 
 **Context for Next Agent:**
-- Merchant-facing dashboard complete with navigation and onboarding
-- API key generation and management fully functional
-- Welcome card with manual dismissal following CONTEXT.md requirements
-- Empty state ready for matrix creation flow
-- No blockers - ready for admin matrix management or additional Phase 1 work
+- Phase 1 fully verified by human — OAuth, dashboard, API keys, error handling all working
+- Polaris CSS properly imported in both root and app layouts
+- Navigation working (Dashboard + Settings in sidebar)
+- Database running on localhost:5400 with Store and GdprRequest tables
+- Ready for Prisma schema additions for matrix models
 
 ---
 *State tracked since: 2026-02-03*
