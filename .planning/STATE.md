@@ -1,7 +1,7 @@
 # Project State: Shopify Price Matrix App
 
 **Last Updated:** 2026-02-04
-**Status:** Phase 2 In Progress — Product Assignment Complete
+**Status:** Phase 2 Complete — Ready for Phase 3
 
 ## Project Reference
 
@@ -9,21 +9,21 @@
 
 **What This Is:** A public Shopify app with three components: (1) embedded admin dashboard for matrix configuration, (2) REST API for headless storefronts to fetch pricing, (3) drop-in React widget for easy integration. Merchants define breakpoint grids (width x height), assign them to products, and customers get real-time dimension-based pricing with checkout via Draft Orders.
 
-**Current Focus:** Phase 2 two-thirds complete. Matrix management (create, list, edit, product assignment) fully functional. Duplication and deletion remain.
+**Current Focus:** Phase 2 complete. All matrix management features verified. Ready to begin Phase 3 (Draft Orders Integration).
 
 ## Current Position
 
-**Phase:** 2 of 6 (Admin Matrix Management) — IN PROGRESS
-**Plan:** 4 of 6
-**Status:** In progress
-**Last activity:** 2026-02-04 - Completed 02-04-PLAN.md (Product Assignment)
+**Phase:** 2 of 6 (Admin Matrix Management) — COMPLETE
+**Plan:** 5 of 5
+**Status:** Complete
+**Last activity:** 2026-02-04 - Phase 2 human-verified and verifier passed (24/24 must-haves)
 
 **Progress Bar:**
 ```
-[███████             ] 33% (7/21 plans estimated complete)
+[█████████           ] 48% (10/21 requirements complete)
 
 Phase 1: Foundation & Authentication       [██████████] 3/3 ✓
-Phase 2: Admin Matrix Management           [██████    ] 4/6
+Phase 2: Admin Matrix Management           [██████████] 5/5 ✓
 Phase 3: Draft Orders Integration          [          ] 0/1
 Phase 4: Public REST API                   [          ] 0/4
 Phase 5: React Widget (npm Package)        [          ] 0/5
@@ -32,7 +32,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 
 ## Performance Metrics
 
-**Velocity:** 3.3 min/plan (7 plans completed)
+**Velocity:** 3.2 min/plan (8 plans completed)
 **Blockers:** 0
 **Active Research:** 0
 
@@ -46,6 +46,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 | 02-admin-matrix-management | 02 | 2026-02-04 | 3min | ✓ Complete |
 | 02-admin-matrix-management | 03 | 2026-02-04 | 3min | ✓ Complete |
 | 02-admin-matrix-management | 04 | 2026-02-04 | 4min | ✓ Complete |
+| 02-admin-matrix-management | 05 | 2026-02-04 | UAT | ✓ Complete |
 
 ## Accumulated Context
 
@@ -87,8 +88,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 ### Open Todos
 
 **Immediate:**
-- [ ] Execute 02-05-PLAN.md (Matrix duplication)
-- [ ] Execute 02-06-PLAN.md (Matrix deletion)
+- [ ] Plan Phase 3 (Draft Orders Integration) via `/gsd:plan-phase 3`
 
 **Upcoming:**
 - [ ] Research Draft Orders behavior during Phase 3 planning
@@ -111,40 +111,35 @@ From research:
 
 - **[01-UAT]** Polaris CSS must be explicitly imported via `links` export — AppProvider alone doesn't load styles
 - **[01-UAT]** Root ErrorBoundary needs its own Polaris CSS import since it renders outside the app layout
+- **[02-UAT]** In embedded Shopify apps with `unstable_newEmbeddedAuthStrategy`, never use Polaris `url` props for navigation. Always use Remix's `useNavigate` for client-side navigation to preserve session token context.
+- **[02-UAT]** Never call `navigate()` during render. Use `useEffect` or server-side `redirect()`.
 
 ## Session Continuity
 
 **Last session:** 2026-02-04
-**Stopped at:** Completed 02-04-PLAN.md (Product Assignment)
+**Stopped at:** Phase 2 complete, all 5 plans executed, human-verified, verifier passed
 **Resume file:** None
 
 **What Just Happened:**
-- Completed 02-04-PLAN.md (Product assignment via Resource Picker)
-- Built ProductPicker component: Shopify Resource Picker integration with conflict modal for reassignments
-- Updated matrix editor loader to fetch full product list from ProductMatrix relation
-- Added assign-products action: checks for conflicts, handles reassignment with confirmation
-- Added remove-product action: security check ensures product belongs to matrix
-- State management for conflict products and pending products during reassignment flow
-- Integrated ProductPicker into matrix editor, replacing placeholder section
-- All TypeScript compilation checks passed
+- Completed all Phase 2 plans (02-01 through 02-05)
+- Human verified full matrix management flow end-to-end
+- Fixed 3 issues during UAT (navigation, dashboard button, duplicate redirect)
+- Verifier confirmed 24/24 must-haves pass
+- All 6 MATRIX requirements satisfied
 
 **What Comes Next:**
-- Phase 2 Plan 05: Matrix Duplication — duplicate matrices with copy of breakpoints/cells
-- Phase 2 Plan 06: Matrix Deletion — delete matrices with cascade cleanup
-- Product assignment fully functional with immediate persistence
-- Merchants can link products to matrices via Resource Picker
-- Conflict detection prevents accidental product reassignments
-- One-matrix-per-product constraint enforced
+- Phase 3: Draft Orders Integration — create Shopify Draft Orders with matrix pricing
+- Research flagged for complex Draft Order behavior (inventory, async, rate limits)
+- Matrix data ready for price calculations
 
 **Context for Next Agent:**
-- Matrix editor has fully functional product assignment section
-- ProductPicker component at app/components/ProductPicker.tsx uses Resource Picker
-- Product assignments persist immediately (separate from matrix save action)
-- Reassignment conflicts detected on first submit, user confirms via modal
-- GID format normalized to gid://shopify/Product/{id} for consistency
-- ProductMatrix model has unique constraint on productId
-- Ready for duplication (copy matrix without copying product assignments per 02-02 decision)
-- Ready for deletion (cascade deletes will clean up all relations)
+- Phase 2 fully verified — create, edit, delete, duplicate matrices all working
+- Spreadsheet-style grid editor with inline price editing
+- Product assignment via Shopify Resource Picker with conflict detection
+- Settings page with unit preference (mm/cm)
+- Database: Store, GdprRequest, PriceMatrix, Breakpoint, MatrixCell, ProductMatrix
+- All navigation uses Remix useNavigate (not Polaris url props) for embedded app compatibility
+- Database running on localhost:5400
 
 ---
 *State tracked since: 2026-02-03*

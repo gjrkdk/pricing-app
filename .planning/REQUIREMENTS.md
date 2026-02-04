@@ -9,19 +9,19 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### App Infrastructure
 
-- [ ] **INFRA-01**: App installs via Shopify OAuth flow and persists merchant session
-- [ ] **INFRA-02**: Embedded app uses session token authentication (mandatory for embedded apps)
-- [ ] **INFRA-03**: GDPR webhook handlers respond to customer data requests and deletion (mandatory for App Store)
-- [ ] **INFRA-04**: API key auto-generated per store on install for storefront authentication
+- [x] **INFRA-01**: App installs via Shopify OAuth flow and persists merchant session
+- [x] **INFRA-02**: Embedded app uses session token authentication (mandatory for embedded apps)
+- [x] **INFRA-03**: GDPR webhook handlers respond to customer data requests and deletion (mandatory for App Store)
+- [x] **INFRA-04**: API key auto-generated per store on install for storefront authentication
 
 ### Matrix Management
 
-- [ ] **MATRIX-01**: Merchant can create a price matrix with named width breakpoints and height breakpoints
-- [ ] **MATRIX-02**: Merchant can set a price at each width/height intersection in the matrix
-- [ ] **MATRIX-03**: Merchant can edit an existing matrix (add/remove breakpoints, change prices)
-- [ ] **MATRIX-04**: Merchant can delete a matrix
-- [ ] **MATRIX-05**: Merchant can assign a shared matrix to one or more products
-- [ ] **MATRIX-06**: Each product links to at most one matrix
+- [x] **MATRIX-01**: Merchant can create a price matrix with named width breakpoints and height breakpoints
+- [x] **MATRIX-02**: Merchant can set a price at each width/height intersection in the matrix
+- [x] **MATRIX-03**: Merchant can edit an existing matrix (add/remove breakpoints, change prices)
+- [x] **MATRIX-04**: Merchant can delete a matrix
+- [x] **MATRIX-05**: Merchant can assign a shared matrix to one or more products
+- [x] **MATRIX-06**: Each product links to at most one matrix
 - [ ] **MATRIX-07**: Merchant can create a matrix by uploading a CSV file
 
 ### Pricing API
@@ -97,16 +97,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 1 | Pending |
-| INFRA-04 | Phase 1 | Pending |
-| MATRIX-01 | Phase 2 | Pending |
-| MATRIX-02 | Phase 2 | Pending |
-| MATRIX-03 | Phase 2 | Pending |
-| MATRIX-04 | Phase 2 | Pending |
-| MATRIX-05 | Phase 2 | Pending |
-| MATRIX-06 | Phase 2 | Pending |
+| INFRA-01 | Phase 1 | Complete |
+| INFRA-02 | Phase 1 | Complete |
+| INFRA-03 | Phase 1 | Complete |
+| INFRA-04 | Phase 1 | Complete |
+| MATRIX-01 | Phase 2 | Complete |
+| MATRIX-02 | Phase 2 | Complete |
+| MATRIX-03 | Phase 2 | Complete |
+| MATRIX-04 | Phase 2 | Complete |
+| MATRIX-05 | Phase 2 | Complete |
+| MATRIX-06 | Phase 2 | Complete |
 | MATRIX-07 | Phase 6 | Pending |
 | API-01 | Phase 4 | Pending |
 | API-02 | Phase 4 | Pending |

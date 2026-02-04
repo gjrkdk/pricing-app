@@ -55,11 +55,11 @@ Plans:
 **Plans:** 5 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Database schema (matrix models) and Settings page (unit preference)
-- [ ] 02-02-PLAN.md — Matrix list page (EmptyState/IndexTable) and create matrix page (templates)
-- [ ] 02-03-PLAN.md — Matrix editor with spreadsheet-style grid editing and validation
-- [ ] 02-04-PLAN.md — Product assignment via Shopify Resource Picker
-- [ ] 02-05-PLAN.md — Human verification of complete matrix management flow
+- [x] 02-01-PLAN.md — Database schema (matrix models) and Settings page (unit preference)
+- [x] 02-02-PLAN.md — Matrix list page (EmptyState/IndexTable) and create matrix page (templates)
+- [x] 02-03-PLAN.md — Matrix editor with spreadsheet-style grid editing and validation
+- [x] 02-04-PLAN.md — Product assignment via Shopify Resource Picker
+- [x] 02-05-PLAN.md — Human verification of complete matrix management flow
 
 **Success Criteria:**
 1. Merchant can create a new matrix with width breakpoints (e.g., 12, 24, 36 inches) and height breakpoints (e.g., 12, 24, 36 inches) through the dashboard
@@ -151,14 +151,14 @@ Plans:
 | Phase | Status | Requirements | Completion |
 |-------|--------|--------------|------------|
 | **1. Foundation & Authentication** | Complete | 4 | 100% |
-| **2. Admin Matrix Management** | Planned | 6 | 0% |
+| **2. Admin Matrix Management** | Complete | 6 | 100% |
 | **3. Draft Orders Integration** | Pending | 1 | 0% |
 | **4. Public REST API** | Pending | 4 | 0% |
 | **5. React Widget (npm Package)** | Pending | 5 | 0% |
 | **6. Polish & App Store Preparation** | Pending | 1 | 0% |
 
 **Total Requirements:** 21/21 mapped
-**Overall Progress:** 19% (4/21 requirements complete)
+**Overall Progress:** 48% (10/21 requirements complete)
 
 ---
 
@@ -173,7 +173,7 @@ Plans:
 - No orphaned requirements
 - No requirements duplicated across phases
 
-**Next Step:** Plan Phase 2 via `/gsd:plan-phase 2`
+**Next Step:** Plan Phase 3 via `/gsd:plan-phase 3`
 
 ---
 *Last updated: 2026-02-04*
