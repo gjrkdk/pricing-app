@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { useLoaderData, Form, useActionData, useNavigation } from "@remix-run/react";
+import { useLoaderData, Form, useActionData, useNavigation, useNavigate } from "@remix-run/react";
 import {
   Page,
   Layout,
@@ -157,6 +157,7 @@ export default function NewMatrix() {
   const { unitPreference } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [template, setTemplate] = useState<Template[]>(["small"]);
@@ -180,7 +181,7 @@ export default function NewMatrix() {
   return (
     <Page
       title="Create matrix"
-      backAction={{ url: "/app/matrices" }}
+      backAction={{ onAction: () => navigate("/app/matrices") }}
     >
       <Form method="post">
         <Layout>
@@ -246,7 +247,7 @@ export default function NewMatrix() {
 
         <Layout.Section>
           <InlineStack gap="300" align="end">
-            <Button url="/app/matrices">Cancel</Button>
+            <Button onClick={() => navigate("/app/matrices")}>Cancel</Button>
             <Button
               variant="primary"
               submit

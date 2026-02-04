@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useFetcher } from "@remix-run/react";
+import { useLoaderData, useFetcher, useNavigate } from "@remix-run/react";
 import {
   Page,
   Card,
@@ -449,6 +449,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export default function MatrixEdit() {
   const loaderData = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const navigate = useNavigate();
 
   // State for grid data
   const [name, setName] = useState(loaderData.matrix.name);
@@ -784,7 +785,7 @@ export default function MatrixEdit() {
   return (
     <Page
       title={name}
-      backAction={{ url: "/app/matrices" }}
+      backAction={{ onAction: () => navigate("/app/matrices") }}
       primaryAction={
         <Button
           variant="primary"

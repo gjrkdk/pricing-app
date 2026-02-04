@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useSubmit, useActionData } from "@remix-run/react";
+import { useLoaderData, useSubmit, useActionData, useNavigate } from "@remix-run/react";
 import {
   Page,
   Layout,
@@ -90,6 +90,7 @@ export default function Index() {
   const { store, newApiKey } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const submit = useSubmit();
+  const navigate = useNavigate();
 
   const [visibleApiKey, setVisibleApiKey] = useState<string | null>(newApiKey);
   const [showRegenerateModal, setShowRegenerateModal] = useState(false);
@@ -232,7 +233,7 @@ export default function Index() {
                   </Text>
                 </BlockStack>
                 <InlineStack align="start">
-                  <Button variant="primary">Create Matrix</Button>
+                  <Button variant="primary" onClick={() => navigate("/app/matrices/new")}>Create Matrix</Button>
                 </InlineStack>
               </BlockStack>
             </Card>

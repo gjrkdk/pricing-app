@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { useLoaderData, useNavigate, useFetcher } from "@remix-run/react";
 import {
   Page,
@@ -138,7 +138,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     });
 
     // Redirect to the new matrix's edit page
-    return json({ redirectTo: `/app/matrices/${duplicate.id}/edit` });
+    return redirect(`/app/matrices/${duplicate.id}/edit`);
   }
 
   return json({ error: "Invalid intent" }, { status: 400 });
@@ -151,11 +151,6 @@ export default function MatricesIndex() {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [matrixToDelete, setMatrixToDelete] = useState<Matrix | null>(null);
-
-  // Handle redirect from duplicate action
-  if (fetcher.data && "redirectTo" in fetcher.data) {
-    navigate(fetcher.data.redirectTo);
-  }
 
   const handleRowClick = useCallback(
     (matrixId: string) => {
@@ -199,7 +194,7 @@ export default function MatricesIndex() {
           heading="Create your first pricing matrix"
           action={{
             content: "Create matrix",
-            url: "/app/matrices/new",
+            onAction: () => navigate("/app/matrices/new"),
           }}
           image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
         >
@@ -267,7 +262,7 @@ export default function MatricesIndex() {
       title="Matrices"
       primaryAction={{
         content: "Create matrix",
-        url: "/app/matrices/new",
+        onAction: () => navigate("/app/matrices/new"),
       }}
     >
       <Card padding="0">

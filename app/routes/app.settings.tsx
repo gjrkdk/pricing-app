@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, useFetcher } from "@remix-run/react";
+import { useLoaderData, useFetcher, useNavigate } from "@remix-run/react";
 import {
   Page,
   Layout,
@@ -57,6 +57,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Settings() {
   const { unitPreference } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const navigate = useNavigate();
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
 
   // Show success banner when save succeeds
@@ -76,7 +77,7 @@ export default function Settings() {
   };
 
   return (
-    <Page title="Settings" backAction={{ url: "/app" }}>
+    <Page title="Settings" backAction={{ onAction: () => navigate("/app") }}>
       {showSuccessBanner && (
         <div style={{ marginBottom: "1rem" }}>
           <Banner tone="success" onDismiss={() => setShowSuccessBanner(false)}>
