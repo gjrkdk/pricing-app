@@ -9,14 +9,16 @@ datasource db {
 }
 
 model Store {
-  id                  String   @id @default(cuid())
-  shop                String   @unique
+  id                  String         @id @default(cuid())
+  shop                String         @unique
   accessToken         String?
   apiKeyHash          String?
   apiKeyPrefix        String?
-  onboardingCompleted Boolean  @default(false)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  onboardingCompleted Boolean        @default(false)
+  unitPreference      String         @default("mm")
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  matrices            PriceMatrix[]
 }
 
 model GdprRequest {
@@ -29,4 +31,54 @@ model GdprRequest {
 
   @@index([shop])
   @@index([type])
+}
+
+model PriceMatrix {
+  id               String          @id @default(cuid())
+  storeId          String
+  name             String
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  store            Store           @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  widthBreakpoints Breakpoint[]
+  cells            MatrixCell[]
+  products         ProductMatrix[]
+
+  @@index([storeId])
+}
+
+model Breakpoint {
+  id       String      @id @default(cuid())
+  matrixId String
+  axis     String
+  value    Float
+  position Int
+  matrix   PriceMatrix @relation(fields: [matrixId], references: [id], onDelete: Cascade)
+
+  @@unique([matrixId, axis, value])
+  @@index([matrixId, axis])
+}
+
+model MatrixCell {
+  id             String      @id @default(cuid())
+  matrixId       String
+  widthPosition  Int
+  heightPosition Int
+  price          Float
+  matrix         PriceMatrix @relation(fields: [matrixId], references: [id], onDelete: Cascade)
+
+  @@unique([matrixId, widthPosition, heightPosition])
+  @@index([matrixId])
+}
+
+model ProductMatrix {
+  id           String      @id @default(cuid())
+  matrixId     String
+  productId    String
+  productTitle String
+  assignedAt   DateTime    @default(now())
+  matrix       PriceMatrix @relation(fields: [matrixId], references: [id], onDelete: Cascade)
+
+  @@unique([productId])
+  @@index([matrixId])
 }
