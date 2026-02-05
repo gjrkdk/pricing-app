@@ -180,7 +180,7 @@ export async function createDraftOrder(
     };
   }
 
-  // Step 4: Get variant ID if not provided
+  // Step 4: Get variant ID (for local record keeping)
   let variantId = inputVariantId;
   if (!variantId) {
     const fetchedVariantId = await getProductVariant(admin, productId);
@@ -198,10 +198,12 @@ export async function createDraftOrder(
   const heightDisplay = formatDimension(height, unitPreference);
 
   // Step 6: Create Draft Order via GraphQL with retry logic
+  // Use a custom line item (title + originalUnitPrice) instead of variantId,
+  // because Shopify ignores originalUnitPrice when variantId is present.
   const draftOrderInput = {
     lineItems: [
       {
-        variantId,
+        title: productTitle,
         quantity,
         originalUnitPrice: calculatedPrice,
         customAttributes: [
