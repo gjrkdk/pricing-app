@@ -1,7 +1,7 @@
 # Project State: Shopify Price Matrix App
 
 **Last Updated:** 2026-02-05
-**Status:** Phase 3 In Progress — Database Schema Complete
+**Status:** Phase 3 Complete — Price Calculator Service Built
 
 ## Project Reference
 
@@ -9,14 +9,14 @@
 
 **What This Is:** A public Shopify app with three components: (1) embedded admin dashboard for matrix configuration, (2) REST API for headless storefronts to fetch pricing, (3) drop-in React widget for easy integration. Merchants define breakpoint grids (width x height), assign them to products, and customers get real-time dimension-based pricing with checkout via Draft Orders.
 
-**Current Focus:** Phase 3 (Draft Orders Integration) in progress. Database schema for order tracking complete. Ready to build draft order creation API.
+**Current Focus:** Phase 3 (Draft Orders Integration) complete. Price calculator service built with TDD. Ready for Phase 4 (Public REST API).
 
 ## Current Position
 
-**Phase:** 3 of 6 (Draft Orders Integration) — IN PROGRESS
-**Plan:** 1 of 1 (database schema complete)
-**Status:** In progress
-**Last activity:** 2026-02-05 - Completed 03-02-PLAN.md (database schema)
+**Phase:** 3 of 6 (Draft Orders Integration) — COMPLETE
+**Plan:** 1 of 1 — COMPLETE
+**Status:** Complete
+**Last activity:** 2026-02-05 - Completed 03-01-PLAN.md (Price Calculator Service)
 
 **Progress Bar:**
 ```
@@ -47,7 +47,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 | 02-admin-matrix-management | 03 | 2026-02-04 | 3min | ✓ Complete |
 | 02-admin-matrix-management | 04 | 2026-02-04 | 4min | ✓ Complete |
 | 02-admin-matrix-management | 05 | 2026-02-04 | UAT | ✓ Complete |
-| 03-draft-orders-integration | 02 | 2026-02-05 | 2min | ✓ Complete |
+| 03-draft-orders-integration | 01 | 2026-02-05 | 4min | ✓ Complete |
 
 ## Accumulated Context
 
@@ -81,8 +81,8 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 - **[02-04]** Product assignments persist immediately (not part of matrix save flow): Separate actions for assign/remove provide instant feedback without coupling to matrix save
 - **[02-04]** GID format normalization: Resource Picker returns various GID formats, always normalize to gid://shopify/Product/{id} for consistency
 - **[02-04]** Conflict modal pattern: Two-submit pattern (detect conflicts on first submit, show modal, confirm on second submit) prevents accidental reassignments
-- **[03-02]** Store totalDraftOrdersCreated counter for efficient dashboard display without counting records
-- **[03-02]** Manual migration creation using prisma migrate diff to handle non-interactive environment
+- **[03-01]** Breakpoint lookup algorithm: Use findIndex with dimension <= breakpoint.value for natural round-up behavior
+- **[03-01]** Pure function design: Accept MatrixData as parameter instead of querying database (enables testing without mocking)
 
 **Pending:**
 - Rate limiting strategy (in-memory vs Redis) - decided during Phase 4 planning
@@ -91,7 +91,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 ### Open Todos
 
 **Immediate:**
-- [ ] Continue Phase 3 (Draft Orders Integration) - execute remaining plans
+- [ ] Plan Phase 4 (Public REST API) via `/gsd:plan-phase 4`
 
 **Upcoming:**
 - [ ] Research API security patterns (HMAC, rate limiting) during Phase 4 planning
@@ -119,27 +119,27 @@ From research:
 ## Session Continuity
 
 **Last session:** 2026-02-05
-**Stopped at:** Completed 03-02-PLAN.md (database schema for order tracking)
+**Stopped at:** Completed 03-01-PLAN.md (Price Calculator Service)
 **Resume file:** None
 
 **What Just Happened:**
-- Executed plan 03-02: Database schema for Draft Order tracking
-- Added DraftOrderRecord model with 13 tracking fields (IDs, dimensions, pricing)
-- Added totalDraftOrdersCreated counter to Store model
-- Created and applied migration (manual workflow for non-interactive environment)
-- All 2 tasks committed atomically
+- Executed plan 03-01: Price Calculator Service using TDD
+- Installed vitest testing framework
+- Built calculatePrice and validateDimensions functions
+- All 25 tests passing (exact match, round up, clamping, validation)
+- Followed RED-GREEN-REFACTOR TDD cycle
+- 2 commits (feat + refactor)
 
 **What Comes Next:**
-- Phase 3 continues with remaining plans (draft order creation API)
-- DraftOrderRecord model available via prisma.draftOrderRecord
-- Store counter ready for atomic increment
-- Ready to build Shopify Draft Order creation flow
+- Phase 4: Public REST API — expose pricing endpoint for headless storefronts
+- Research API security patterns (HMAC verification, rate limiting)
+- Price calculator service ready for integration
 
 **Context for Next Agent:**
 - Phase 2 fully verified (matrix CRUD, spreadsheet editor, product assignments)
-- Phase 3 database schema complete: DraftOrderRecord table with cascade deletes
-- Database: Store, GdprRequest, PriceMatrix, Breakpoint, MatrixCell, ProductMatrix, DraftOrderRecord
-- Counter field pattern established: Store.totalDraftOrdersCreated for efficient dashboard
+- Phase 3 complete: Price calculator service with comprehensive test coverage
+- Database: Store, GdprRequest, PriceMatrix, Breakpoint, MatrixCell, ProductMatrix
+- Services: price-calculator.server.ts with calculatePrice and validateDimensions
 - All navigation uses Remix useNavigate (not Polaris url props) for embedded app compatibility
 - Database running on localhost:5400
 
