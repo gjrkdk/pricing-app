@@ -14,19 +14,19 @@
 ## Current Position
 
 **Phase:** 5 of 6 (React Widget) — IN PROGRESS
-**Plan:** 3 of 5 — COMPLETE
+**Plan:** 4 of 5 — COMPLETE
 **Status:** In progress
-**Last activity:** 2026-02-06 - Completed 05-03-PLAN.md (Widget Hooks and Components)
+**Last activity:** 2026-02-06 - Completed 05-04-PLAN.md (Widget Assembly)
 
 **Progress Bar:**
 ```
-[███████████████████ ] 90% (19/21 requirements complete)
+[████████████████████] 95% (20/21 requirements complete)
 
 Phase 1: Foundation & Authentication       [██████████] 3/3 ✓
 Phase 2: Admin Matrix Management           [██████████] 5/5 ✓
 Phase 3: Draft Orders Integration          [██████████] 3/3 ✓
 Phase 4: Public REST API                   [██████████] 3/3 ✓
-Phase 5: React Widget (npm Package)        [██████    ] 3/5
+Phase 5: React Widget (npm Package)        [████████  ] 4/5
 Phase 6: Polish & App Store Preparation    [          ] 0/1
 ```
 
@@ -56,6 +56,7 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 | 05-react-widget | 01 | 2026-02-06 | 63min | ✓ Complete |
 | 05-react-widget | 02 | 2026-02-06 | 2min | ✓ Complete |
 | 05-react-widget | 03 | 2026-02-06 | 2min | ✓ Complete |
+| 05-react-widget | 04 | 2026-02-06 | 7min | ✓ Complete |
 
 ## Accumulated Context
 
@@ -116,6 +117,10 @@ Phase 6: Polish & App Store Preparation    [          ] 0/1
 - **[05-03]** CSS shimmer skeleton for Shadow DOM: Custom CSS animation instead of react-loading-skeleton (library's style injection incompatible with Shadow DOM)
 - **[05-03]** AbortController for request cancellation: Cancels in-flight requests when dimension inputs change to prevent race conditions
 - **[05-03]** Metadata caching pattern: Store currency/unit/dimensionRange on first successful fetch (these don't change for a product)
+- **[05-04]** CSS as TypeScript export: Using styles.ts instead of .css file avoids CSS import issues in Vite library mode. CSS string injected via <style> tag inside Shadow DOM.
+- **[05-04]** Theme prop runtime customization: 6 optional theme properties map to CSS custom properties as inline styles on Shadow DOM root for runtime theming without CSS rebuilds
+- **[05-04]** Client-side dimension validation: Widget validates dimensions are numeric and within dimensionRange before enabling add-to-cart, showing inline error messages
+- **[05-04]** Checkout redirect flow: Add-to-cart creates Draft Order, calls onAddToCart callback, then redirects to checkout URL via window.location.href
 
 **Pending:**
 - Pricing model (subscription vs one-time) - decided during Phase 6
@@ -155,28 +160,29 @@ From research:
 ## Session Continuity
 
 **Last session:** 2026-02-06
-**Stopped at:** Completed 05-03-PLAN.md (Widget Hooks and Components)
+**Stopped at:** Completed 05-04-PLAN.md (Widget Assembly)
 **Resume file:** None
 
 **What Just Happened:**
-- Executed Plan 05-03: Widget Hooks and Components
-- Created usePriceFetch hook with 400ms debouncing, AbortController cancellation, and RFC 7807 error handling
-- Created useDraftOrder hook for Draft Order creation via POST /api/v1/draft-orders
-- Built 4 internal UI components: DimensionInput (text field with validation), PriceDisplay (currency formatting with CSS shimmer), QuantitySelector (+/- buttons), AddToCartButton (disabled state + CSS spinner)
-- All components Shadow DOM compatible (pm- CSS prefixes, CSS custom properties, no external CSS libraries)
-- All 2 tasks committed atomically: 9e7aab6, 6c04616
+- Executed Plan 05-04: Widget Assembly
+- Created PriceMatrixWidget.tsx component with Shadow DOM (react-shadow), wiring all hooks and components together
+- Created styles.ts with CSS string export containing pm- prefixed classes and CSS custom properties
+- Built package to ESM + UMD with TypeScript declarations (npm run build)
+- Human verification checkpoint: Both API endpoints tested (price API returns currency/dimensionRange/unit, draft-orders API creates order with checkoutUrl)
+- Build outputs verified: ESM (408KB), UMD (283KB), TypeScript declarations present
+- All locked decisions from CONTEXT.md implemented (text fields, inline validation, 400ms debounce, total price only, checkout redirect)
+- Task committed atomically: 3910d28
 
 **What Comes Next:**
-- Continue Phase 5: React Widget (Plans 04-05)
-- Plan 04: Compose PriceMatrixWidget from hooks and components
-- Plan 05: Widget styling with Shadow DOM CSS
+- Continue Phase 5: React Widget (Plan 05)
+- Plan 05: Widget documentation and publishing preparation (README, npm pack verification, publish instructions)
 
 **Context for Next Agent:**
-- All hooks and components ready at packages/widget/src/hooks/ and packages/widget/src/components/
-- usePriceFetch manages debounced price fetching with width/height state
-- useDraftOrder handles Draft Order creation with creating/error states
-- Internal components use pm- CSS classes and CSS custom properties for theming
-- index.ts currently imports non-existent PriceMatrixWidget.tsx (will be created in Plan 04)
+- Widget is complete and buildable at packages/widget/
+- PriceMatrixWidget component assembles all hooks and components inside Shadow DOM
+- Theme prop enables runtime customization via CSS custom properties
+- Complete user flow works: dimension inputs → price fetch → quantity → add to cart → checkout
+- Package builds successfully, React externalized, TypeScript declarations generated
 
 ---
 *State tracked since: 2026-02-03*
