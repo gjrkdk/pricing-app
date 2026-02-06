@@ -2,9 +2,11 @@ import "@shopify/shopify-app-remix/adapters/node";
 import {
   ApiVersion,
   AppDistribution,
+  BillingInterval,
   DeliveryMethod,
   shopifyApp,
 } from "@shopify/shopify-app-remix/server";
+import { BillingReplacementBehavior } from "@shopify/shopify-api";
 import { PostgreSQLSessionStorage } from "@shopify/shopify-app-session-storage-postgresql";
 import { restResources } from "@shopify/shopify-api/rest/admin/2024-01";
 
@@ -20,6 +22,15 @@ const shopify = shopifyApp({
   ),
   distribution: AppDistribution.AppStore,
   restResources,
+  billing: {
+    UNLIMITED_PLAN: {
+      amount: 12.0,
+      currencyCode: "USD",
+      interval: BillingInterval.Every30Days,
+      trialDays: 14,
+      replacementBehavior: BillingReplacementBehavior.ApplyImmediately,
+    },
+  },
   webhooks: {
     APP_UNINSTALLED: {
       deliveryMethod: DeliveryMethod.Http,
