@@ -24,7 +24,11 @@ Merchants can offer custom-dimension pricing on their headless Shopify storefron
 
 ### Active
 
-(None — define for next milestone)
+- [ ] Widget published to npm as @pricing-matrix/widget
+- [ ] App deployed to production on Vercel with stable URL
+- [ ] App submitted to Shopify App Store with full listing (screenshots, icon, description)
+- [ ] All rough edges fixed and polished for production readiness
+- [ ] End-to-end flow verified in production (admin UI → REST API → widget → Draft Order)
 
 ### Out of Scope
 
@@ -66,5 +70,16 @@ Merchants can offer custom-dimension pricing on their headless Shopify storefron
 | Shadow DOM with CSS-in-JS for widget | react-loading-skeleton incompatible with Shadow DOM; CSS shimmer animation works | Good |
 | In-memory rate limiting | MVP choice for single-instance; Redis migration path documented | Revisit |
 
+## Current Milestone: v1.1 Publish & Polish
+
+**Goal:** Get the app production-ready, published on npm, deployed to Vercel, and submitted to the Shopify App Store.
+
+**Target features:**
+- Publish @pricing-matrix/widget to npm registry
+- Deploy to Vercel with production database, env vars, and stable URL
+- Create App Store listing with screenshots, icon, and description copy
+- Fix/polish any rough edges found during production testing
+- Verify full end-to-end flow in production environment
+
 ---
-*Last updated: 2026-02-06 after v1.0 milestone*
+*Last updated: 2026-02-06 after starting v1.1 milestone*
