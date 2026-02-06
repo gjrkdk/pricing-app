@@ -14,6 +14,7 @@ import {
   Modal,
   Toast,
   Frame,
+  Grid,
 } from "@shopify/polaris";
 import { useEffect, useState, useCallback } from "react";
 import { authenticate } from "~/shopify.server";
@@ -167,98 +168,102 @@ export default function Index() {
           )}
 
           <Layout.Section>
-            <Card>
-              <BlockStack gap="400">
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    API Key
-                  </Text>
-                  <Text as="p" tone="subdued">
-                    Use this key to authenticate API requests from your
-                    storefront.
-                  </Text>
-                </BlockStack>
-
-                {visibleApiKey ? (
-                  <BlockStack gap="300">
-                    <Banner tone="warning">
-                      <Text as="p">
-                        Save this key now — you won't be able to see it again.
-                        If you lose it, you'll need to regenerate a new one.
+            <Grid columns={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }} gap="400">
+              <Grid.Cell>
+                <Card>
+                  <BlockStack gap="400">
+                    <BlockStack gap="200">
+                      <Text as="h2" variant="headingMd">
+                        API Key
                       </Text>
-                    </Banner>
-                    <TextField
-                      label="API Key"
-                      value={visibleApiKey}
-                      readOnly
-                      autoComplete="off"
-                      labelHidden
-                    />
-                    <InlineStack gap="200">
-                      <Button onClick={handleCopyApiKey}>Copy Key</Button>
-                      <Button onClick={() => setVisibleApiKey(null)}>
-                        Hide Key
-                      </Button>
+                      <Text as="p" tone="subdued">
+                        Use this key to authenticate API requests from your
+                        storefront.
+                      </Text>
+                    </BlockStack>
+
+                    {visibleApiKey ? (
+                      <BlockStack gap="300">
+                        <Banner tone="warning">
+                          <Text as="p">
+                            Save this key now — you won't be able to see it again.
+                            If you lose it, you'll need to regenerate a new one.
+                          </Text>
+                        </Banner>
+                        <TextField
+                          label="API Key"
+                          value={visibleApiKey}
+                          readOnly
+                          autoComplete="off"
+                          labelHidden
+                        />
+                        <InlineStack gap="200">
+                          <Button onClick={handleCopyApiKey}>Copy Key</Button>
+                          <Button onClick={() => setVisibleApiKey(null)}>
+                            Hide Key
+                          </Button>
+                        </InlineStack>
+                      </BlockStack>
+                    ) : (
+                      <BlockStack gap="300">
+                        <TextField
+                          label="API Key"
+                          value={maskedKey}
+                          readOnly
+                          autoComplete="off"
+                          labelHidden
+                        />
+                        <InlineStack gap="200">
+                          <Button onClick={() => setShowRegenerateModal(true)}>
+                            Regenerate Key
+                          </Button>
+                        </InlineStack>
+                      </BlockStack>
+                    )}
+                  </BlockStack>
+                </Card>
+              </Grid.Cell>
+
+              {store.totalDraftOrdersCreated > 0 && (
+                <Grid.Cell>
+                  <Card>
+                    <BlockStack gap="400">
+                      <BlockStack gap="200">
+                        <Text as="h2" variant="headingMd">
+                          Draft Orders
+                        </Text>
+                        <Text as="p" tone="subdued">
+                          Orders created with matrix pricing. View in Shopify admin
+                          using the "price-matrix" tag filter.
+                        </Text>
+                      </BlockStack>
+                      <Text as="p" variant="headingLg">
+                        {store.totalDraftOrdersCreated}
+                      </Text>
+                    </BlockStack>
+                  </Card>
+                </Grid.Cell>
+              )}
+
+              <Grid.Cell>
+                <Card>
+                  <BlockStack gap="400">
+                    <BlockStack gap="200">
+                      <Text as="h2" variant="headingMd">
+                        Pricing Matrices
+                      </Text>
+                      <Text as="p" tone="subdued">
+                        No pricing matrices yet. Create your first matrix to start
+                        offering dimension-based pricing on your products.
+                      </Text>
+                    </BlockStack>
+                    <InlineStack align="start">
+                      <Button variant="primary" onClick={() => navigate("/app/matrices/new")}>Create Matrix</Button>
                     </InlineStack>
                   </BlockStack>
-                ) : (
-                  <BlockStack gap="300">
-                    <TextField
-                      label="API Key"
-                      value={maskedKey}
-                      readOnly
-                      autoComplete="off"
-                      labelHidden
-                    />
-                    <InlineStack gap="200">
-                      <Button onClick={() => setShowRegenerateModal(true)}>
-                        Regenerate Key
-                      </Button>
-                    </InlineStack>
-                  </BlockStack>
-                )}
-              </BlockStack>
-            </Card>
-          </Layout.Section>
-
-          {store.totalDraftOrdersCreated > 0 && (
-            <Layout.Section>
-              <Card>
-                <BlockStack gap="400">
-                  <BlockStack gap="200">
-                    <Text as="h2" variant="headingMd">
-                      Draft Orders
-                    </Text>
-                    <Text as="p" tone="subdued">
-                      Orders created with matrix pricing. View in Shopify admin
-                      using the "price-matrix" tag filter.
-                    </Text>
-                  </BlockStack>
-                  <Text as="p" variant="headingLg">
-                    {store.totalDraftOrdersCreated}
-                  </Text>
-                </BlockStack>
-              </Card>
-            </Layout.Section>
-          )}
-
-          <Layout.Section>
-            <Card>
-              <BlockStack gap="400">
-                <BlockStack gap="200">
-                  <Text as="h2" variant="headingMd">
-                    Pricing Matrices
-                  </Text>
-                  <Text as="p" tone="subdued">
-                    No pricing matrices yet. Create your first matrix to start
-                    offering dimension-based pricing on your products.
-                  </Text>
-                </BlockStack>
-                <InlineStack align="start">
-                  <Button variant="primary" onClick={() => navigate("/app/matrices/new")}>Create Matrix</Button>
-                </InlineStack>
-              </BlockStack>
-            </Card>
+                </Card>
+              </Grid.Cell>
+            </Grid>
           </Layout.Section>
         </Layout>
 
