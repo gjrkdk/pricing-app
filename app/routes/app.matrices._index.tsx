@@ -12,7 +12,7 @@ import {
   Button,
   Box,
 } from "@shopify/polaris";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { authenticate } from "~/shopify.server";
 import { prisma } from "~/db.server";
 
@@ -152,6 +152,10 @@ export default function MatricesIndex() {
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [matrixToDelete, setMatrixToDelete] = useState<Matrix | null>(null);
+  const [deletedMatrixId, setDeletedMatrixId] = useState<string | null>(null);
+
+  // Refs for focus management
+  const rowRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
 
   const handleRowClick = useCallback(
     (matrixId: string) => {
@@ -174,6 +178,7 @@ export default function MatricesIndex() {
     fetcher.submit(formData, { method: "post" });
 
     setDeleteModalOpen(false);
+    setDeletedMatrixId(matrixToDelete.id);
     setMatrixToDelete(null);
   }, [matrixToDelete, fetcher]);
 
@@ -187,6 +192,36 @@ export default function MatricesIndex() {
     [fetcher]
   );
 
+  // Focus management after delete
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data && deletedMatrixId) {
+      if (matrices.length === 0) {
+        // No matrices remain - focus on create button in empty state
+        // Empty state button will be rendered after this component unmounts
+        // Use a timeout to wait for the empty state to render
+        setTimeout(() => {
+          const emptyStateButton = document.getElementById(
+            "create-matrix-btn"
+          ) as HTMLButtonElement;
+          if (emptyStateButton) {
+            emptyStateButton.focus();
+          }
+        }, 100);
+      } else {
+        // Matrix was successfully deleted - focus on the first matrix in the list
+        const firstMatrix = matrices[0];
+        if (firstMatrix) {
+          const rowElement = rowRefs.current.get(firstMatrix.id);
+          if (rowElement) {
+            rowElement.focus();
+          }
+        }
+      }
+
+      setDeletedMatrixId(null);
+    }
+  }, [fetcher.state, fetcher.data, deletedMatrixId, matrices]);
+
   // Empty state when no matrices
   if (matrices.length === 0) {
     return (
@@ -196,6 +231,7 @@ export default function MatricesIndex() {
           action={{
             content: "Create matrix",
             onAction: () => navigate("/app/matrices/new"),
+            id: "create-matrix-btn",
           }}
           image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
         >
@@ -218,9 +254,21 @@ export default function MatricesIndex() {
       onClick={() => handleRowClick(matrix.id)}
     >
       <IndexTable.Cell>
-        <Text as="span" fontWeight="semibold">
-          {matrix.name}
-        </Text>
+        <span
+          ref={(el) => {
+            if (el) {
+              rowRefs.current.set(matrix.id, el);
+            } else {
+              rowRefs.current.delete(matrix.id);
+            }
+          }}
+          tabIndex={-1}
+          style={{ outline: "none" }}
+        >
+          <Text as="span" fontWeight="semibold">
+            {matrix.name}
+          </Text>
+        </span>
       </IndexTable.Cell>
       <IndexTable.Cell>
         {matrix.widthCount} x {matrix.heightCount}
