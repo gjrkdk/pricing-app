@@ -22,7 +22,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **MATRIX-04**: Merchant can delete a matrix
 - [x] **MATRIX-05**: Merchant can assign a shared matrix to one or more products
 - [x] **MATRIX-06**: Each product links to at most one matrix
-- [ ] **MATRIX-07**: Merchant can create a matrix by uploading a CSV file
+- [x] **MATRIX-07**: Merchant can create a matrix by uploading a CSV file
 
 ### Pricing API
 
@@ -107,7 +107,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MATRIX-04 | Phase 2 | Complete |
 | MATRIX-05 | Phase 2 | Complete |
 | MATRIX-06 | Phase 2 | Complete |
-| MATRIX-07 | Phase 6 | Pending |
+| MATRIX-07 | Phase 6 | Complete |
 | API-01 | Phase 4 | Complete |
 | API-02 | Phase 4 | Complete |
 | API-03 | Phase 4 | Complete |
@@ -126,4 +126,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-03*
-*Last updated: 2026-02-06 after Phase 5 completion*
+*Last updated: 2026-02-06 after Phase 6 completion*
