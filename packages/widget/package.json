@@ -1,0 +1,43 @@
+{
+  "name": "@pricing-matrix/widget",
+  "version": "0.1.0",
+  "description": "Drop-in React widget for Shopify dimension-based pricing with live price updates and Draft Order checkout",
+  "type": "module",
+  "main": "./dist/price-matrix-widget.umd.js",
+  "module": "./dist/price-matrix-widget.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/price-matrix-widget.es.js",
+      "require": "./dist/price-matrix-widget.umd.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "use-debounce": "^10.0.0",
+    "react-shadow": "^20.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0",
+    "vite-plugin-dts": "^3.0.0"
+  },
+  "keywords": ["shopify", "pricing", "widget", "react", "dimension-pricing"],
+  "license": "MIT"
+}
