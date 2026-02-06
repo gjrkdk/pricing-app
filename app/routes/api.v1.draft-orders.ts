@@ -17,8 +17,11 @@ import {
   calculatePrice,
   validateDimensions,
 } from "~/services/price-calculator.server";
+import {
+  submitDraftOrder,
+  getProductVariant,
+} from "~/services/draft-order.server";
 import { prisma } from "~/db.server";
-import { backOff } from "exponential-backoff";
 
 /**
  * Adds CORS headers to a response to allow cross-origin requests.
@@ -56,49 +59,6 @@ function createShopifyAdmin(shop: string, accessToken: string) {
       };
     },
   };
-}
-
-/**
- * Queries Shopify for the first variant of a product.
- */
-async function getProductVariant(
-  admin: any,
-  productId: string
-): Promise<string | null> {
-  const response = await admin.graphql(
-    `#graphql
-      query GetProductVariant($productId: ID!) {
-        product(id: $productId) {
-          variants(first: 1) {
-            edges {
-              node {
-                id
-              }
-            }
-          }
-        }
-      }`,
-    {
-      variables: { productId },
-    }
-  );
-
-  const data = await response.json();
-
-  if (data.errors) {
-    console.error("GraphQL errors:", data.errors);
-    return null;
-  }
-
-  const variant = data.data?.product?.variants?.edges?.[0]?.node;
-  return variant?.id || null;
-}
-
-/**
- * Formats a dimension value for display based on unit preference.
- */
-function formatDimension(value: number, unit: string): string {
-  return `${value}${unit}`;
 }
 
 /**
@@ -269,152 +229,42 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    // 11. Format dimensions for display
-    const widthDisplay = formatDimension(width, productMatrix.unit);
-    const heightDisplay = formatDimension(height, productMatrix.unit);
+    // 11. Submit Draft Order via shared service
+    const result = await submitDraftOrder({
+      admin,
+      storeId: store.id,
+      matrixId: productMatrixRecord.matrixId,
+      productId: normalizedProductId,
+      variantId,
+      productTitle: productMatrixRecord.productTitle,
+      width,
+      height,
+      quantity,
+      unitPrice,
+      unit: productMatrix.unit,
+    });
 
-    // 12. Create Draft Order via GraphQL with retry logic
-    const draftOrderInput = {
-      lineItems: [
-        {
-          title: productMatrixRecord.productTitle,
-          quantity,
-          originalUnitPrice: unitPrice,
-          customAttributes: [
-            { key: "Width", value: widthDisplay },
-            { key: "Height", value: heightDisplay },
-          ],
-        },
-      ],
-      tags: ["price-matrix"],
-    };
-
-    let draftOrderResult: any;
-    try {
-      draftOrderResult = await backOff(
-        async () => {
-          const response = await admin.graphql(
-            `#graphql
-              mutation DraftOrderCreate($input: DraftOrderInput!) {
-                draftOrderCreate(input: $input) {
-                  draftOrder {
-                    id
-                    name
-                    totalPrice
-                    invoiceUrl
-                  }
-                  userErrors {
-                    field
-                    message
-                  }
-                }
-              }`,
-            {
-              variables: { input: draftOrderInput },
-            }
-          );
-
-          const data = await response.json();
-
-          // Check for GraphQL errors
-          if (data.errors) {
-            throw new Error(`GraphQL error: ${JSON.stringify(data.errors)}`);
-          }
-
-          // Check for userErrors (these should NOT be retried)
-          if (
-            data.data?.draftOrderCreate?.userErrors &&
-            data.data.draftOrderCreate.userErrors.length > 0
-          ) {
-            const errors = data.data.draftOrderCreate.userErrors
-              .map((e: any) => `${e.field}: ${e.message}`)
-              .join(", ");
-            throw new Error(`Draft Order creation failed: ${errors}`);
-          }
-
-          // Check if draftOrder exists in response
-          if (!data.data?.draftOrderCreate?.draftOrder) {
-            throw new Error("Draft Order not returned from Shopify");
-          }
-
-          return data.data.draftOrderCreate;
-        },
-        {
-          numOfAttempts: 3,
-          startingDelay: 1000,
-          timeMultiple: 2,
-          maxDelay: 5000,
-          jitter: "full",
-          retry: (error: any) => {
-            // Only retry on rate limit errors (429)
-            const is429 =
-              error.message?.includes("429") ||
-              error.message?.includes("RATE_LIMITED");
-            return is429;
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Draft Order creation error:", error);
+    if (!result.success) {
       throw json(
         {
           type: "about:blank",
           title: "Internal Server Error",
           status: 500,
-          detail: "Failed to create Draft Order in Shopify",
+          detail: result.error || "Failed to create Draft Order in Shopify",
         },
         { status: 500 }
       );
     }
 
-    const draftOrder = draftOrderResult.draftOrder;
-
-    // 13. Save local record in database
-    try {
-      await prisma.$transaction(async (tx) => {
-        // Create Draft Order record
-        await tx.draftOrderRecord.create({
-          data: {
-            storeId: store.id,
-            matrixId: productMatrixRecord.matrixId,
-            shopifyDraftOrderId: draftOrder.id,
-            shopifyOrderName: draftOrder.name,
-            productId: normalizedProductId,
-            variantId,
-            width,
-            height,
-            quantity,
-            calculatedPrice: unitPrice,
-            totalPrice: draftOrder.totalPrice,
-          },
-        });
-
-        // Increment store counter
-        await tx.store.update({
-          where: { id: store.id },
-          data: {
-            totalDraftOrdersCreated: {
-              increment: 1,
-            },
-          },
-        });
-      });
-    } catch (error) {
-      console.error("Failed to save Draft Order record:", error);
-      // Draft Order was created in Shopify, but we failed to save locally
-      // Return success anyway since the Draft Order exists
-    }
-
-    // 14. Return success response with CORS and rate limit headers
-    const total = unitPrice * quantity;
+    // 12. Return success response with CORS and rate limit headers
     const rateLimitHeaders = getRateLimitHeaders(store.id);
 
     const response = json(
       {
-        draftOrderId: draftOrder.id,
-        name: draftOrder.name,
-        checkoutUrl: draftOrder.invoiceUrl,
-        total: draftOrder.totalPrice,
+        draftOrderId: result.draftOrder!.id,
+        name: result.draftOrder!.name,
+        checkoutUrl: result.draftOrder!.invoiceUrl,
+        total: result.draftOrder!.totalPrice,
         price: unitPrice,
         dimensions: {
           width,
