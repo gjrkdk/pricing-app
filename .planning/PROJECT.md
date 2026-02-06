@@ -12,19 +12,19 @@ Merchants can offer custom-dimension pricing on their headless Shopify storefron
 
 ### Validated
 
-(None yet — ship to validate)
+- Merchant can create a price matrix with fixed width and height breakpoints and a price at each intersection — v1.0
+- Merchant can assign a shared matrix to multiple products (one matrix per product) — v1.0
+- Merchant can manage matrices through an embedded Polaris dashboard in Shopify admin — v1.0
+- Headless storefront can look up price by product + width + height via REST API — v1.0
+- Prices round up to the next breakpoint when customer dimensions fall between defined steps — v1.0
+- Storefront customers see a drop-in React widget with dimension inputs, live price display, and add-to-cart — v1.0
+- Orders are created as Shopify Draft Orders with the custom calculated price locked in — v1.0
+- Each store gets an API key for storefront-to-API authentication — v1.0
+- App is installable as a public Shopify app (App Store listed) — v1.0
 
 ### Active
 
-- [ ] Merchant can create a price matrix with fixed width and height breakpoints and a price at each intersection
-- [ ] Merchant can assign a shared matrix to multiple products (one matrix per product)
-- [ ] Merchant can manage matrices through an embedded Polaris dashboard in Shopify admin
-- [ ] Headless storefront can look up price by product + width + height via REST API
-- [ ] Prices round up to the next breakpoint when customer dimensions fall between defined steps
-- [ ] Storefront customers see a drop-in React widget with dimension inputs, live price display, and add-to-cart
-- [ ] Orders are created as Shopify Draft Orders with the custom calculated price locked in
-- [ ] Each store gets an API key for storefront-to-API authentication
-- [ ] App is installable as a public Shopify app (App Store listed)
+(None — define for next milestone)
 
 ### Out of Scope
 
@@ -42,6 +42,7 @@ Merchants can offer custom-dimension pricing on their headless Shopify storefron
 - **Storefront integration:** Two paths — (1) REST API for custom integrations, (2) drop-in React widget with full UX (inputs + price + add-to-cart)
 - **Order flow:** Widget/API → calculate price → create Shopify Draft Order with locked custom price → convert to real order
 - **Matrix sharing:** Matrices are reusable — one "6mm Glass" matrix can be assigned to multiple glass products. Each product links to exactly one matrix.
+- **Current state:** v1.0 shipped with 6,810 LOC TypeScript across 145 files. Tech stack: Remix 2.5, React 18, Polaris 12, Prisma 5.8, PostgreSQL.
 
 ## Constraints
 
@@ -54,12 +55,16 @@ Merchants can offer custom-dimension pricing on their headless Shopify storefron
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Fixed breakpoints over formulas | Simpler for merchants to understand, simpler to implement, covers the core use case | — Pending |
-| Round-up for in-between dimensions | Predictable pricing, no fractional math, merchants always get at least the breakpoint price | — Pending |
-| Draft Orders for custom pricing | Only reliable way to lock a custom price in Shopify without checkout extensions | — Pending |
-| API key per store (not Storefront token) | Storefront API tokens are scoped to Shopify's APIs, won't authenticate custom endpoints | — Pending |
-| One matrix per product | Keeps data model simple; merchants use separate products for variant pricing | — Pending |
-| Remix + Polaris on Vercel | Follows Shopify's official conventions; Vercel supports Remix well | — Pending |
+| Fixed breakpoints over formulas | Simpler for merchants to understand, simpler to implement, covers the core use case | Good |
+| Round-up for in-between dimensions | Predictable pricing, no fractional math, merchants always get at least the breakpoint price | Good |
+| Draft Orders for custom pricing | Only reliable way to lock a custom price in Shopify without checkout extensions | Good |
+| API key per store (not Storefront token) | Storefront API tokens are scoped to Shopify's APIs, won't authenticate custom endpoints | Good |
+| One matrix per product | Keeps data model simple; merchants use separate products for variant pricing | Good |
+| Remix + Polaris on Vercel | Follows Shopify's official conventions; Vercel supports Remix well | Good |
+| Custom line items for Draft Orders | Shopify ignores originalUnitPrice when variantId is present; custom line items give full control | Good |
+| Custom HTML table over Polaris DataGrid | Needed full spreadsheet control for inline editing, tab nav, dynamic breakpoint headers | Good |
+| Shadow DOM with CSS-in-JS for widget | react-loading-skeleton incompatible with Shadow DOM; CSS shimmer animation works | Good |
+| In-memory rate limiting | MVP choice for single-instance; Redis migration path documented | Revisit |
 
 ---
-*Last updated: 2026-02-03 after initialization*
+*Last updated: 2026-02-06 after v1.0 milestone*
