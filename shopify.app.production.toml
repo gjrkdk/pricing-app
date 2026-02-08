@@ -1,14 +1,6 @@
-# Production Shopify app configuration
-# Usage: shopify app deploy --config shopify.app.production.toml
-#
-# Before using:
-# 1. Create a new app in Shopify Partner Dashboard
-# 2. Replace client_id with the production app's Client ID
-# 3. Replace YOUR_APP with your actual Vercel subdomain
-
-client_id = "REPLACE_WITH_PRODUCTION_CLIENT_ID"
-name = "Dynamic Pricing"
-application_url = "https://YOUR_APP.vercel.app"
+client_id = "d78dd3e635d5cb58866d9d38de855675"
+name = "QuoteFlow"
+application_url = "https://quote-flow-one.vercel.app"
 embedded = true
 
 [build]
@@ -28,7 +20,7 @@ use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [
-  "https://YOUR_APP.vercel.app/auth/callback"
+  "https://quote-flow-one.vercel.app/auth/callback"
 ]
 
 [pos]
