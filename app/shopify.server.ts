@@ -17,6 +17,13 @@ if (process.env.DATABASE_URL?.includes("neon.tech")) {
   pg.defaults.ssl = true;
 }
 
+// Export session storage so REST API routes can load offline sessions directly.
+// The embedded auth strategy (token exchange) returns short-lived tokens,
+// but offline sessions have permanent access tokens needed for REST API calls.
+export const sessionStorage = new PostgreSQLSessionStorage(
+  process.env.DATABASE_URL || "",
+);
+
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY || "",
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
@@ -24,9 +31,7 @@ const shopify = shopifyApp({
   scopes: process.env.SCOPES?.split(",") || [],
   appUrl: process.env.SHOPIFY_APP_URL || "",
   authPathPrefix: "/auth",
-  sessionStorage: new PostgreSQLSessionStorage(
-    process.env.DATABASE_URL || "",
-  ),
+  sessionStorage,
   distribution: AppDistribution.AppStore,
   restResources,
   billing: {

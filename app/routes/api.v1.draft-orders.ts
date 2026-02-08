@@ -19,6 +19,7 @@ import {
 } from "~/services/price-calculator.server";
 import { submitDraftOrder } from "~/services/draft-order.server";
 import { prisma } from "~/db.server";
+import { sessionStorage } from "~/shopify.server";
 
 /**
  * Adds CORS headers to a response to allow cross-origin requests.
@@ -170,13 +171,32 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    // 7. Get store's access token for Shopify API
-    const storeWithToken = await prisma.store.findUnique({
+    // 7. Get store's shop domain
+    const storeRecord = await prisma.store.findUnique({
       where: { id: store.id },
-      select: { accessToken: true, shop: true },
+      select: { shop: true },
     });
 
-    if (!storeWithToken || !storeWithToken.accessToken) {
+    if (!storeRecord) {
+      throw json(
+        {
+          type: "about:blank",
+          title: "Internal Server Error",
+          status: 500,
+          detail: "Store not found",
+        },
+        { status: 500 }
+      );
+    }
+
+    // 8. Load offline session for permanent access token.
+    // The embedded auth strategy (token exchange) stores short-lived tokens
+    // in Store.accessToken, but offline sessions have permanent tokens.
+    const offlineSession = await sessionStorage.loadSession(
+      `offline_${storeRecord.shop}`
+    );
+
+    if (!offlineSession?.accessToken) {
       throw json(
         {
           type: "about:blank",
@@ -188,13 +208,13 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    // 8. Create Shopify admin client
+    // 9. Create Shopify admin client
     const admin = createShopifyAdmin(
-      storeWithToken.shop,
-      storeWithToken.accessToken
+      storeRecord.shop,
+      offlineSession.accessToken
     );
 
-    // 9. Get product title from database
+    // 10. Get product title from database
     const productMatrixRecord = await prisma.productMatrix.findUnique({
       where: { productId: normalizedProductId },
       select: { productTitle: true, matrixId: true },
@@ -212,7 +232,7 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    // 10. Submit Draft Order via shared service
+    // 11. Submit Draft Order via shared service
     const result = await submitDraftOrder({
       admin,
       storeId: store.id,
@@ -238,7 +258,7 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    // 11. Return success response with CORS and rate limit headers
+    // 12. Return success response with CORS and rate limit headers
     const rateLimitHeaders = getRateLimitHeaders(store.id);
 
     const response = json(
