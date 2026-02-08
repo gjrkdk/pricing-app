@@ -9,6 +9,9 @@ packages/widget/demo/.env
 # Shopify
 .shopify
 
+# Vercel
+.vercel
+
 # OS
 .DS_Store
 Thumbs.db

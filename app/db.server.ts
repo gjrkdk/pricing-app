@@ -14,6 +14,7 @@ let prisma: PrismaClient;
 
 // Always use pooling with pg adapter for Vercel deployment
 // In production, DATABASE_URL should use pgbouncer connection with connection_limit=1
+// Note: DIRECT_URL is used by Prisma CLI only (migrations) and not read at runtime
 if (!global.__db) {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
