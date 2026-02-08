@@ -39,6 +39,12 @@ Progress:
 - `use_legacy_install_flow = true` required for proper offline session tokens
 - CORS preflight handled before authentication in REST API routes
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | Rename widget npm package from @gjrkdk/pricing-matrix-widget to @gjrkdk/quote-flow | 2026-02-08 | 4e5f1cc | [001-rename-widget-package](./quick/001-rename-widget-package/) |
+
 ## Session Continuity
 
 **Last session:** 2026-02-08 17:44:00 UTC
