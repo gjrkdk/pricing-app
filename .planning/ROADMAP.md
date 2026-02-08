@@ -60,7 +60,7 @@ Plans:
 
 **Goal:** Register the app in Partner Dashboard so merchants can install via direct link
 **Depends on:** Phase 08 (needs production URL for OAuth config)
-**Plans:** TBD
+**Plans:** 2 plans
 
 **Requirements:**
 - APP-01: App registered with correct OAuth redirects and scopes
@@ -72,6 +72,10 @@ Plans:
 2. OAuth redirect URLs point to Vercel deployment
 3. A merchant can install the app using the direct install link
 4. After install, merchant lands on the embedded dashboard
+
+Plans:
+- [ ] 09-01-PLAN.md — Select Public distribution and deploy production TOML to Partner Dashboard
+- [ ] 09-02-PLAN.md — Test OAuth install flow on development store
 
 ---
 
