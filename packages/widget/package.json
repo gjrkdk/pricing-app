@@ -1,16 +1,16 @@
 {
-  "name": "@gjrkdk/pricing-matrix-widget",
+  "name": "@gjrkdk/quote-flow",
   "version": "0.1.0",
   "description": "Drop-in React widget for Shopify dimension-based pricing with live price updates and Draft Order checkout",
   "type": "module",
-  "main": "./dist/price-matrix-widget.umd.js",
-  "module": "./dist/price-matrix-widget.es.js",
+  "main": "./dist/quote-flow.umd.js",
+  "module": "./dist/quote-flow.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/price-matrix-widget.es.js",
-      "require": "./dist/price-matrix-widget.umd.js"
+      "import": "./dist/quote-flow.es.js",
+      "require": "./dist/quote-flow.umd.js"
     }
   },
   "files": ["dist", "README.md", "LICENSE"],
@@ -38,7 +38,7 @@
     "vite": "^5.0.0",
     "vite-plugin-dts": "^3.0.0"
   },
-  "keywords": ["shopify", "pricing", "widget", "react", "dimension-pricing", "draft-order"],
+  "keywords": ["shopify", "pricing", "quote-flow", "react", "dimension-pricing", "draft-order"],
   "author": "gjrkdk",
   "repository": {
     "type": "git",

@@ -14,9 +14,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'PriceMatrixWidget',
+      name: 'QuoteFlow',
       formats: ['es', 'umd'],
-      fileName: (format) => `price-matrix-widget.${format}.js`,
+      fileName: (format) => `quote-flow.${format}.js`,
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
