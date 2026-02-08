@@ -60,6 +60,26 @@ function createShopifyAdmin(shop: string, accessToken: string) {
 }
 
 /**
+ * Handles GET/OPTIONS requests. Only OPTIONS (CORS preflight) is valid.
+ */
+export async function loader({ request }: ActionFunctionArgs) {
+  if (request.method === "OPTIONS") {
+    return withCors(new Response(null, { status: 204 }));
+  }
+  return withCors(
+    json(
+      {
+        type: "about:blank",
+        title: "Method Not Allowed",
+        status: 405,
+        detail: "Use POST to create a draft order.",
+      },
+      { status: 405 }
+    )
+  );
+}
+
+/**
  * Handles POST requests to create a Draft Order.
  */
 export async function action({ request }: ActionFunctionArgs) {

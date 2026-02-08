@@ -33,6 +33,11 @@ function withCors(response: Response): Response {
  * Handles GET requests to fetch price for given dimensions.
  */
 export async function loader({ request, params }: LoaderFunctionArgs) {
+  // Handle OPTIONS preflight before authentication
+  if (request.method === "OPTIONS") {
+    return withCors(new Response(null, { status: 204 }));
+  }
+
   try {
     // 1. Authentication
     const store = await authenticateApiKey(request);
