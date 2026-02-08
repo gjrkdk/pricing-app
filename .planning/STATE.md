@@ -15,12 +15,12 @@ See: .planning/PROJECT.md (updated 2026-02-06)
 
 **Milestone:** v1.1 Publish & Polish
 **Phase:** 08 of 4 (Production Deploy to Vercel)
-**Plan:** 1 of 2 complete
-**Status:** In progress — Plan 08-01 complete (Vercel config)
-**Last activity:** 2026-02-08 — Completed 08-01-PLAN.md (Vercel Configuration)
+**Plan:** 2 of 2 complete
+**Status:** Phase 08 complete — deployed to quote-flow-one.vercel.app
+**Last activity:** 2026-02-08 — Completed 08-02-PLAN.md (Production Deployment)
 
-Progress: █████████████████████████████▓░ 96% (26/27 plans)
-[Phases 01-06: Complete] [Phase 07: Complete] [Phase 08: 1/2]
+Progress: ██████████████████████████████ 100% (27/27 plans)
+[Phases 01-06: Complete] [Phase 07: Complete] [Phase 08: Complete]
 
 ## Archived
 
@@ -37,12 +37,16 @@ Progress: ███████████████████████�
 - npm package verified at 194.7 kB tarball with pack/publish dry-run checks passing
 - Widget published to npm as @gjrkdk/pricing-matrix-widget@0.1.0 (scope changed from @pricing-matrix due to unavailability)
 - Local .npmrc added to override global GitHub Package Registry redirect
+- App renamed to QuoteFlow for production branding
+- Production deployment: https://quote-flow-one.vercel.app (Vercel fra1 + Neon EU Central)
+- Vercel builds use `remix vite:build` directly (Shopify CLI not available on Vercel)
+- Root .npmrc has legacy-peer-deps=true for vitest/@shopify/cli-kit peer dep conflict
 
 ## Session Continuity
 
-**Last session:** 2026-02-08 12:39:27 UTC
-**Stopped at:** Completed 08-01-PLAN.md (Vercel Configuration)
-**Resume file:** .planning/phases/08-production-deploy-to-vercel/08-01-SUMMARY.md
+**Last session:** 2026-02-08 13:30:00 UTC
+**Stopped at:** Completed 08-02-PLAN.md (Production Deployment)
+**Resume file:** None
 
 ---
 *State tracked since: 2026-02-03*

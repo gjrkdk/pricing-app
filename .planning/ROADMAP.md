@@ -32,11 +32,12 @@ Plans:
 
 ---
 
-### Phase 08: Production Deploy to Vercel
+### Phase 08: Production Deploy to Vercel ✓
 
 **Goal:** Deploy the app to Vercel with a production Neon database and stable URL
+**Status:** Complete (2026-02-08)
 **Depends on:** None (can run in parallel with Phase 07)
-**Plans:** 2 plans
+**Plans:** 2 plans (2/2 complete)
 
 **Requirements:**
 - DEPLOY-01: App on Vercel with production PostgreSQL and stable URL
@@ -51,7 +52,7 @@ Plans:
 
 Plans:
 - [x] 08-01-PLAN.md — Configure Vercel adapter, Prisma dual-URL, build pipeline, and production TOML
-- [ ] 08-02-PLAN.md — Create Neon DB, production Shopify app, deploy to Vercel, verify
+- [x] 08-02-PLAN.md — Create Neon DB, production Shopify app, deploy to Vercel, verify
 
 ---
 
