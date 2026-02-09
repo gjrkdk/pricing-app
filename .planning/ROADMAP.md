@@ -117,10 +117,12 @@ Plans:
   3. Option groups can be assigned to multiple products (shared, reusable)
   4. Price calculation applies modifiers using integer (cents) arithmetic without floating-point errors
   5. Percentage modifiers are calculated from base matrix price (non-compounding)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 11-01: TBD during phase planning
+- [ ] 11-01-PLAN.md — Prisma schema for option groups, choices, and product assignments with migration
+- [ ] 11-02-PLAN.md — Zod validators and service layer for option group CRUD and assignments
+- [ ] 11-03-PLAN.md — TDD: Option price calculator with integer arithmetic and price breakdown
 
 #### Phase 12: Admin UI for Option Groups
 **Goal**: Merchants can create and manage option groups through Polaris admin dashboard
