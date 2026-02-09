@@ -45,7 +45,11 @@ Milestones:
 **Recent Trend:**
 - v1.0 → v1.1: Faster (focused deployment work)
 - v1.2 expected: Similar to v1.0 (new features + App Store prep)
+
+| Plan | Duration (s) | Tasks | Files |
+|------|--------------|-------|-------|
 | Phase 11 P01 | 148 | 2 tasks | 2 files |
+| Phase 11 P02 | 153 | 2 tasks | 2 files |
 | Phase 11 P03 | 169 | 1 tasks | 2 files |
 
 ## Archived
@@ -69,6 +73,8 @@ Milestones:
 - Integer (cents) arithmetic for all price calculations (avoid floating-point errors)
 - GraphQL Admin API migration mandatory (REST deprecated for App Store)
 - DIRECT_URL environment variable added to .env for local development (Phase 11: required by Prisma for schema validation)
+- Replace strategy for option group choice updates (delete all, create new - simpler than diffing)
+- Application-level cap enforcement for option group assignments (5 groups per product in service layer)
 - Ceiling rounding for percentage modifiers (Math.ceil toward positive infinity)
 - Non-compounding modifier stacking (all calculate from base price)
 
