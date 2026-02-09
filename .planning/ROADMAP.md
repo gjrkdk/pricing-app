@@ -137,9 +137,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 12-01-PLAN.md — Option groups list page with IndexTable, delete modal, and navigation link
-- [ ] 12-02-PLAN.md — Create and edit forms with dynamic choices and Zod validation
-- [ ] 12-03-PLAN.md — Product assignment on edit page and full UI verification checkpoint
+- [x] 12-01-PLAN.md — Option groups list page with IndexTable, delete modal, and navigation link
+- [x] 12-02-PLAN.md — Create and edit forms with dynamic choices and Zod validation
+- [x] 12-03-PLAN.md — Product assignment on edit page and full UI verification checkpoint
 
 #### Phase 13: REST API Extension
 **Goal**: API accepts option selections and returns modified prices with backward compatibility
@@ -219,7 +219,7 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16
 | 9. Shopify Integration & OAuth | v1.1 | 2/2 | Complete | 2026-02-08 |
 | 10. Production Verification | v1.1 | 2/2 | Complete | 2026-02-08 |
 | 11. Data Model & Price Calculation Foundation | v1.2 | 3/3 | Complete | 2026-02-09 |
-| 12. Admin UI for Option Groups | v1.2 | 0/TBD | Not started | - |
+| 12. Admin UI for Option Groups | v1.2 | 3/3 | Complete | 2026-02-09 |
 | 13. REST API Extension | v1.2 | 0/TBD | Not started | - |
 | 14. Widget Integration | v1.2 | 0/TBD | Not started | - |
 | 15. GraphQL Migration & GDPR | v1.2 | 0/TBD | Not started | - |
