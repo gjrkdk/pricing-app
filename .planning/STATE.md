@@ -15,9 +15,9 @@ See: .planning/PROJECT.md (updated 2026-02-09)
 
 **Milestone:** v1.2 Option Groups & App Store
 **Phase:** 14 of 16 (Widget Integration)
-**Plan:** 1 of 3 (complete)
-**Status:** Phase 14 Plan 01 complete - REST API endpoint and widget types created
-**Last activity:** 2026-02-10 — Completed 14-01-PLAN.md (REST API & Widget Types)
+**Plan:** 2 of 3 (complete)
+**Status:** Phase 14 Plan 02 complete - Widget option group components created
+**Last activity:** 2026-02-10 — Completed 14-02-PLAN.md (Widget Option Group Components)
 
 Progress: [█████████████████████] 81% (14 of 16 phases in progress, 13 complete)
 
@@ -29,7 +29,7 @@ Milestones:
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 40 (v1.0: 23 plans, v1.1: 8 plans, v1.2: 9 plans)
+- Total plans completed: 41 (v1.0: 23 plans, v1.1: 8 plans, v1.2: 10 plans)
 - v1.0 duration: 4 days
 - v1.1 duration: 2 days
 - v1.2 duration: In progress
@@ -57,6 +57,7 @@ Milestones:
 | Phase 13 P01 | 101 | 2 tasks | 2 files |
 | Phase 13 P02 | 208 | 2 tasks | 4 files |
 | Phase 14 P01 | 102 | 2 tasks | 2 files |
+| Phase 14 P02 | 109 | 2 tasks | 4 files |
 
 ## Archived
 
@@ -97,6 +98,8 @@ Milestones:
 - Return empty array (not 404) for products without option groups (Phase 14-01: widget should handle empty state gracefully)
 - Place all option types in internal section of widget types file (Phase 14-01: not exported to consumers)
 - Extend PriceApiResponse and DraftOrderApiResponse with optional fields (Phase 14-01: backward compatible)
+- Use native HTML select for option groups (Phase 14-02: better accessibility and mobile support than custom dropdown)
+- No debouncing for option selection changes (Phase 14-02: immediate price refetch unlike debounced dimensions)
 
 ### Known Technical Debt
 - Billing gates disabled for testing (TODO markers in `billing.server.ts`)
@@ -116,8 +119,8 @@ None yet.
 
 ## Session Continuity
 
-**Last session:** 2026-02-10T20:17:44.610Z
-**Stopped at:** Completed 14-01-PLAN.md
+**Last session:** 2026-02-10T20:21:46.200Z
+**Stopped at:** Completed 14-02-PLAN.md
 **Resume file:** None
 
 ---
