@@ -8,9 +8,11 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { authenticateApiKey } from "~/utils/api-auth.server";
 import {
-  PriceQuerySchema,
+  PriceQueryWithOptionsSchema,
   ProductIdSchema,
   normalizeProductId,
+  OptionSelectionsSchema,
+  type OptionSelection,
 } from "~/validators/api.validators";
 import { checkRateLimit, getRateLimitHeaders } from "~/utils/rate-limit.server";
 import { lookupProductMatrix } from "~/services/product-matrix-lookup.server";
@@ -18,6 +20,11 @@ import {
   calculatePrice,
   validateDimensions,
 } from "~/services/price-calculator.server";
+import { validateOptionSelections } from "~/services/option-validator.server";
+import {
+  calculatePriceWithOptions,
+  type PriceModifier,
+} from "~/services/option-price-calculator.server";
 
 /**
  * Adds CORS headers to a response to allow cross-origin requests.
@@ -66,11 +73,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const widthParam = url.searchParams.get("width");
     const heightParam = url.searchParams.get("height");
     const quantityParam = url.searchParams.get("quantity");
+    const optionsParam = url.searchParams.get("options");
     if (widthParam !== null) queryParams.width = widthParam;
     if (heightParam !== null) queryParams.height = heightParam;
     if (quantityParam !== null) queryParams.quantity = quantityParam;
+    if (optionsParam !== null) queryParams.options = optionsParam;
 
-    const queryValidation = PriceQuerySchema.safeParse(queryParams);
+    const queryValidation = PriceQueryWithOptionsSchema.safeParse(queryParams);
     if (!queryValidation.success) {
       throw json(
         {
@@ -84,7 +93,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       );
     }
 
-    const { width, height, quantity } = queryValidation.data;
+    const { width, height, quantity, options } = queryValidation.data;
 
     // 5. Validate dimensions (business logic)
     const dimensionValidation = validateDimensions(width, height, quantity);
@@ -98,6 +107,68 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         },
         { status: 400 }
       );
+    }
+
+    // 5a. Parse and validate option selections if provided
+    let parsedSelections: OptionSelection[] = [];
+    let validatedGroups: any[] | undefined;
+
+    if (options) {
+      // Parse JSON
+      let parsedOptions: unknown;
+      try {
+        parsedOptions = JSON.parse(options);
+      } catch (error) {
+        throw json(
+          {
+            type: "about:blank",
+            title: "Bad Request",
+            status: 400,
+            detail: "Invalid options JSON",
+          },
+          { status: 400 }
+        );
+      }
+
+      // Validate format
+      const optionsValidation = OptionSelectionsSchema.safeParse(parsedOptions);
+      if (!optionsValidation.success) {
+        throw json(
+          {
+            type: "about:blank",
+            title: "Validation Failed",
+            status: 400,
+            detail: "Invalid options format",
+            errors: optionsValidation.error.flatten().fieldErrors,
+          },
+          { status: 400 }
+        );
+      }
+
+      parsedSelections = optionsValidation.data.selections;
+
+      // Validate selections against product's option groups
+      if (parsedSelections.length > 0) {
+        const validationResult = await validateOptionSelections(
+          normalizedProductId,
+          parsedSelections,
+          store.id
+        );
+
+        if (!validationResult.valid) {
+          throw json(
+            {
+              type: "about:blank",
+              title: "Bad Request",
+              status: 400,
+              detail: validationResult.error || "Invalid option selections",
+            },
+            { status: 400 }
+          );
+        }
+
+        validatedGroups = validationResult.validatedGroups;
+      }
     }
 
     // 6. Look up product matrix
@@ -117,10 +188,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       );
     }
 
-    // 7. Calculate price
+    // 7. Calculate price (with or without options)
     let unitPrice: number;
+    let basePriceCents: number;
+    let priceBreakdown: any;
+
     try {
-      unitPrice = calculatePrice(width, height, productMatrix.matrixData);
+      basePriceCents = calculatePrice(width, height, productMatrix.matrixData);
     } catch (error) {
       // Price calculation failed (missing cell) - return 500
       console.error("Price calculation error:", error);
@@ -135,28 +209,70 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       );
     }
 
+    // Calculate with options if provided
+    if (parsedSelections.length > 0 && validatedGroups) {
+      // Build price modifiers from selections and validated groups
+      const modifiers: PriceModifier[] = [];
+
+      for (const selection of parsedSelections) {
+        const group = validatedGroups.find((g: any) => g.id === selection.optionGroupId);
+        if (group) {
+          const choice = group.choices.find((c: any) => c.id === selection.choiceId);
+          if (choice) {
+            modifiers.push({
+              type: choice.modifierType,
+              value: choice.modifierValue,
+              label: `${group.name}: ${choice.label}`,
+            });
+          }
+        }
+      }
+
+      priceBreakdown = calculatePriceWithOptions(basePriceCents, modifiers);
+      unitPrice = priceBreakdown.totalCents;
+    } else {
+      // No options: use base price
+      unitPrice = basePriceCents;
+    }
+
     // 8. Return success response with CORS and rate limit headers
     const total = unitPrice * quantity;
     const rateLimitHeaders = getRateLimitHeaders(store.id);
 
-    const response = json(
-      {
-        price: unitPrice,
-        currency: productMatrix.currency,
-        dimensions: {
-          width,
-          height,
-          unit: productMatrix.unit,
-        },
-        quantity,
-        total,
-        matrix: productMatrix.matrixName,
-        dimensionRange: productMatrix.dimensionRange,
+    // Build response based on whether options were provided
+    const responseBody: any = {
+      price: unitPrice,
+      currency: productMatrix.currency,
+      dimensions: {
+        width,
+        height,
+        unit: productMatrix.unit,
       },
-      {
-        headers: rateLimitHeaders,
-      }
-    );
+      quantity,
+      total,
+      matrix: productMatrix.matrixName,
+      dimensionRange: productMatrix.dimensionRange,
+    };
+
+    // Add breakdown if options were used
+    if (priceBreakdown) {
+      responseBody.basePrice = priceBreakdown.basePriceCents;
+      responseBody.optionModifiers = priceBreakdown.modifiers.map((m: any) => {
+        // Split label on ": " to get group name and choice label
+        const [groupName, choiceLabel] = m.label.split(": ");
+        return {
+          optionGroup: groupName,
+          choice: choiceLabel,
+          modifierType: m.type,
+          modifierValue: m.originalValue,
+          appliedAmount: m.appliedAmountCents,
+        };
+      });
+    }
+
+    const response = json(responseBody, {
+      headers: rateLimitHeaders,
+    });
 
     return withCors(response);
   } catch (error) {
