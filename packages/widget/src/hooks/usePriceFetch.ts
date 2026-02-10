@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useDebounce } from 'use-debounce';
-import type { PriceApiResponse } from '../types';
+import type { PriceApiResponse, OptionSelection, OptionModifierInfo } from '../types';
 
 interface UsePriceFetchOptions {
   apiUrl: string;
   apiKey: string;
   productId: string;
+  optionSelections?: OptionSelection[];
 }
 
 interface UsePriceFetchReturn {
@@ -20,6 +21,8 @@ interface UsePriceFetchReturn {
   currency: string | null;
   unit: string | null;
   dimensionRange: PriceApiResponse['dimensionRange'] | null;
+  basePrice: number | null;
+  optionModifiers: OptionModifierInfo[] | null;
 }
 
 /**
@@ -37,7 +40,7 @@ export function usePriceFetch(
   options: UsePriceFetchOptions,
   quantity: number = 1
 ): UsePriceFetchReturn {
-  const { apiUrl, apiKey, productId } = options;
+  const { apiUrl, apiKey, productId, optionSelections = [] } = options;
 
   // Raw input state
   const [width, setWidth] = useState('');
@@ -57,6 +60,13 @@ export function usePriceFetch(
   const [currency, setCurrency] = useState<string | null>(null);
   const [unit, setUnit] = useState<string | null>(null);
   const [dimensionRange, setDimensionRange] = useState<PriceApiResponse['dimensionRange'] | null>(null);
+
+  // Option pricing breakdown
+  const [basePrice, setBasePrice] = useState<number | null>(null);
+  const [optionModifiers, setOptionModifiers] = useState<OptionModifierInfo[] | null>(null);
+
+  // Stringify option selections for dependency tracking (avoid reference equality issues)
+  const optionsKey = JSON.stringify(optionSelections);
 
   // Fetch price when debounced dimensions change
   useEffect(() => {
@@ -85,6 +95,11 @@ export function usePriceFetch(
         url.searchParams.set('width', debouncedWidth);
         url.searchParams.set('height', debouncedHeight);
         url.searchParams.set('quantity', String(quantity));
+
+        // Add option selections if present (URLSearchParams.set auto-encodes JSON)
+        if (optionSelections.length > 0) {
+          url.searchParams.set('options', JSON.stringify({ selections: optionSelections }));
+        }
 
         const response = await fetch(url.toString(), {
           headers: {
@@ -125,6 +140,10 @@ export function usePriceFetch(
           setDimensionRange(data.dimensionRange);
         }
 
+        // Update option pricing breakdown (if provided)
+        setBasePrice(data.basePrice ?? null);
+        setOptionModifiers(data.optionModifiers ?? null);
+
         setLoading(false);
       } catch (err) {
         // Ignore AbortError (happens when request is cancelled)
@@ -145,7 +164,7 @@ export function usePriceFetch(
     return () => {
       abortController.abort();
     };
-  }, [debouncedWidth, debouncedHeight, quantity, apiUrl, apiKey, productId, currency, unit, dimensionRange]);
+  }, [debouncedWidth, debouncedHeight, quantity, apiUrl, apiKey, productId, currency, unit, dimensionRange, optionsKey, optionSelections]);
 
   return {
     width,
@@ -159,5 +178,7 @@ export function usePriceFetch(
     currency,
     unit,
     dimensionRange,
+    basePrice,
+    optionModifiers,
   };
 }

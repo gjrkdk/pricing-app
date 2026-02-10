@@ -187,6 +187,43 @@ export const widgetStyles = `
     color: var(--pm-text-color);
   }
 
+  /* Option group selector */
+  .pm-option-group {
+    margin-bottom: 16px;
+  }
+
+  .pm-option-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: var(--pm-font-size);
+    color: var(--pm-text-color);
+  }
+
+  .pm-option-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--pm-border-color);
+    border-radius: var(--pm-border-radius);
+    font-size: var(--pm-font-size);
+    font-family: inherit;
+    color: var(--pm-text-color);
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23637381' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  .pm-option-select:focus {
+    outline: none;
+    border-color: var(--pm-primary-color);
+    box-shadow: 0 0 0 1px var(--pm-primary-color);
+  }
+
   /* Add to Cart button */
   .pm-add-to-cart {
     width: 100%;
