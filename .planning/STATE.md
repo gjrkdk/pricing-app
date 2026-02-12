@@ -15,9 +15,9 @@ See: .planning/PROJECT.md (updated 2026-02-09)
 
 **Milestone:** v1.2 Option Groups & App Store
 **Phase:** 16 of 16 (Performance Audit & App Store Submission)
-**Plan:** 1 of 3 (complete)
-**Status:** Phase 16 Plan 01 complete - database indexes verified, Lighthouse CI configured
-**Last activity:** 2026-02-12 — Database index verification and Lighthouse CI setup complete
+**Plan:** 2 of 3 (complete)
+**Status:** Phase 16 Plan 02 complete - App Store listing materials prepared with v1.2 features
+**Last activity:** 2026-02-12 — App Store description, test credentials, and screenshot automation complete
 
 Progress: [███████████████████████] 93.75% (15 of 16 phases complete, Phase 16 in progress)
 
@@ -64,6 +64,7 @@ Milestones:
 | Phase 15 P01 | 228 | 3 tasks | 4 files |
 | Phase 15 P02 | 125 | 3 tasks | 4 files |
 | Phase 16 P01 | 132 | 2 tasks | 5 files |
+| Phase 16 P02 | 176 | 2 tasks | 4 files |
 
 ## Archived
 
@@ -115,6 +116,9 @@ Milestones:
 - Enqueue async jobs for GDPR webhooks (Phase 15-02: 200ms response time vs synchronous deletion)
 - Vercel Cron with 10 jobs per invocation (Phase 15-02: 600 jobs/hour capacity)
 - SEO checks disabled for Lighthouse CI (Phase 16-01: embedded Shopify app, not public-facing)
+- Playwright over Puppeteer for screenshot automation (Phase 16-02: better CI support, active development)
+- Screenshot dimensions at exact Shopify requirements (Phase 16-02: 1600x900px for app listings)
+- [FILL_IN] placeholders for test credentials (Phase 16-02: avoid committing actual secrets to repository)
 - Desktop preset with minimal throttling for performance testing (Phase 16-01: realistic admin environment)
 - Performance threshold 0.8 for Lighthouse (Phase 16-01: accounts for Shopify 10-point degradation rule)
 - 3-run averaging for Lighthouse baselines (Phase 16-01: consistent regression detection)
@@ -137,8 +141,8 @@ None yet.
 
 ## Session Continuity
 
-**Last session:** 2026-02-12
-**Stopped at:** Phase 16 Plan 01 complete - database indexes verified, Lighthouse CI configured
+**Last session:** 2026-02-12T20:51:12.292Z
+**Stopped at:** Completed 16-02-PLAN.md
 **Resume file:** None
 
 ---
