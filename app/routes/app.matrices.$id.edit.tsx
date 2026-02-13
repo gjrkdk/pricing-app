@@ -535,6 +535,7 @@ export default function MatrixEdit() {
   const loaderData = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const renameFetcher = useFetcher<typeof action>();
+  const productFetcher = useFetcher<typeof action>();
   const navigate = useNavigate();
 
   // State for grid data
@@ -813,19 +814,19 @@ export default function MatrixEdit() {
   // Handle product assignment response
   useEffect(() => {
     if (
-      fetcher.data &&
-      "conflicts" in fetcher.data &&
-      Array.isArray(fetcher.data.conflicts)
+      productFetcher.data &&
+      "conflicts" in productFetcher.data &&
+      Array.isArray(productFetcher.data.conflicts)
     ) {
       setConflictProducts(
-        fetcher.data.conflicts as Array<{
+        productFetcher.data.conflicts as Array<{
           productId: string;
           productTitle: string;
           currentMatrixName: string;
         }>
       );
     }
-  }, [fetcher.data]);
+  }, [productFetcher.data]);
 
   // Product assignment handlers
   const handleAssignProducts = useCallback(
@@ -835,9 +836,9 @@ export default function MatrixEdit() {
       formData.append("intent", "assign-products");
       formData.append("products", JSON.stringify(products));
       formData.append("confirmed", "false");
-      fetcher.submit(formData, { method: "post" });
+      productFetcher.submit(formData, { method: "post" });
     },
-    [fetcher]
+    [productFetcher]
   );
 
   const handleRemoveProduct = useCallback(
@@ -845,9 +846,9 @@ export default function MatrixEdit() {
       const formData = new FormData();
       formData.append("intent", "remove-product");
       formData.append("productMatrixId", productMatrixId);
-      fetcher.submit(formData, { method: "post" });
+      productFetcher.submit(formData, { method: "post" });
     },
-    [fetcher]
+    [productFetcher]
   );
 
   const handleConfirmReassign = useCallback(
@@ -856,11 +857,11 @@ export default function MatrixEdit() {
       formData.append("intent", "assign-products");
       formData.append("products", JSON.stringify(pendingProducts));
       formData.append("confirmed", "true");
-      fetcher.submit(formData, { method: "post" });
+      productFetcher.submit(formData, { method: "post" });
       setConflictProducts([]);
       setPendingProducts([]);
     },
-    [fetcher, pendingProducts]
+    [productFetcher, pendingProducts]
   );
 
   const handleCancelReassign = useCallback(() => {
