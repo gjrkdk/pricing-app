@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 MVP** - Phases 1-6 (shipped 2026-02-06)
 - ✅ **v1.1 Publish & Polish** - Phases 7-10 (shipped 2026-02-08)
-- 🚧 **v1.2 Option Groups & App Store** - Phases 11-16 (in progress)
+- 🚧 **v1.2 Option Groups & App Store** - Phases 11-15 (in progress)
 
 ## Phases
 
@@ -191,25 +191,10 @@ Plans:
 - [x] 15-01-PLAN.md — JobQueue model, job queue service, and GDPR deletion service
 - [x] 15-02-PLAN.md — Webhook async refactor and Vercel Cron endpoint
 
-#### Phase 16: Performance Audit & App Store Submission
-**Goal**: App submitted to Shopify App Store and passes performance standards
-**Depends on**: Phase 15
-**Requirements**: STORE-02, STORE-03, STORE-04
-**Success Criteria** (what must be TRUE):
-  1. Lighthouse score has not degraded more than 10% from baseline
-  2. App listing complete with icon, 3 screenshots (1600x900px), and description
-  3. Test credentials provided for reviewers with working demo store
-  4. App submitted to Shopify App Store for review
-  5. Database has proper indexes on foreign keys (storeId, productId, optionGroupId)
-**Plans**: TBD
-
-Plans:
-- [ ] 16-01: TBD during phase planning
-
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16
+Phases execute in numeric order: 11 → 12 → 13 → 14 → 15
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -228,4 +213,3 @@ Phases execute in numeric order: 11 → 12 → 13 → 14 → 15 → 16
 | 13. REST API Extension | v1.2 | 2/2 | Complete | 2026-02-10 |
 | 14. Widget Integration | v1.2 | 4/4 | Complete | 2026-02-10 |
 | 15. GraphQL Migration & GDPR | v1.2 | 2/2 | Complete | 2026-02-12 |
-| 16. Performance Audit & App Store Submission | v1.2 | 0/TBD | Not started | - |
