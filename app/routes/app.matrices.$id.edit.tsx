@@ -12,6 +12,7 @@ import {
   TextField,
   Select,
 } from "@shopify/polaris";
+import { EditIcon } from "@shopify/polaris-icons";
 import { useState, useEffect, useCallback } from "react";
 import { BreakpointAxis } from "@prisma/client";
 import { authenticate } from "~/shopify.server";
@@ -533,6 +534,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export default function MatrixEdit() {
   const loaderData = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
+  const renameFetcher = useFetcher<typeof action>();
   const navigate = useNavigate();
 
   // State for grid data
@@ -556,6 +558,10 @@ export default function MatrixEdit() {
   const [emptyCells, setEmptyCells] = useState<Set<string>>(new Set());
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  // Rename state
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState(name);
+
   // Product assignment state
   const [conflictProducts, setConflictProducts] = useState<
     Array<{
@@ -575,10 +581,10 @@ export default function MatrixEdit() {
   const [testQuantity, setTestQuantity] = useState<string>("1");
   const testFetcher = useFetcher<typeof action>();
 
-  // Mark as dirty when data changes
+  // Mark as dirty when data changes (exclude name - it's saved separately)
   useEffect(() => {
     setIsDirty(true);
-  }, [widthBreakpoints, heightBreakpoints, cells, name]);
+  }, [widthBreakpoints, heightBreakpoints, cells]);
 
   // Handle cell change
   const handleCellChange = useCallback(
@@ -856,6 +862,53 @@ export default function MatrixEdit() {
     setPendingProducts([]);
   }, []);
 
+  // Rename handlers
+  const handleStartEditName = useCallback(() => {
+    setEditName(name);
+    setIsEditingName(true);
+  }, [name]);
+
+  const handleSaveName = useCallback(() => {
+    if (!editName.trim()) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("intent", "rename");
+    formData.append("name", editName.trim());
+    renameFetcher.submit(formData, { method: "post" });
+  }, [editName, renameFetcher]);
+
+  const handleCancelEditName = useCallback(() => {
+    setEditName(name);
+    setIsEditingName(false);
+  }, [name]);
+
+  const handleNameKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSaveName();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        handleCancelEditName();
+      }
+    },
+    [handleSaveName, handleCancelEditName]
+  );
+
+  // Handle rename response
+  useEffect(() => {
+    if (
+      renameFetcher.data &&
+      "success" in renameFetcher.data &&
+      renameFetcher.data.success
+    ) {
+      setName(editName);
+      setIsEditingName(false);
+    }
+  }, [renameFetcher.data, editName]);
+
   // Test Draft Order handler
   const handleCreateTestDraftOrder = useCallback(() => {
     if (!testProductId || !testWidth || !testHeight || !testQuantity) {
@@ -890,6 +943,54 @@ export default function MatrixEdit() {
       }
     >
       <BlockStack gap="400">
+        <Card>
+          <BlockStack gap="300">
+            <Text as="h2" variant="headingMd">
+              Matrix name
+            </Text>
+            {isEditingName ? (
+              <BlockStack gap="300">
+                <TextField
+                  label=""
+                  value={editName}
+                  onChange={setEditName}
+                  autoComplete="off"
+                  autoFocus
+                  onKeyDown={handleNameKeyDown}
+                />
+                <InlineStack gap="200">
+                  <Button
+                    variant="primary"
+                    onClick={handleSaveName}
+                    loading={renameFetcher.state === "submitting"}
+                    disabled={!editName.trim() || renameFetcher.state === "submitting"}
+                  >
+                    Save
+                  </Button>
+                  <Button onClick={handleCancelEditName}>Cancel</Button>
+                </InlineStack>
+              </BlockStack>
+            ) : (
+              <InlineStack gap="200" blockAlign="center">
+                <Text as="p" variant="headingLg">
+                  {name}
+                </Text>
+                <Button variant="plain" icon={EditIcon} onClick={handleStartEditName}>
+                  Edit
+                </Button>
+              </InlineStack>
+            )}
+          </BlockStack>
+        </Card>
+
+        {renameFetcher.data && "error" in renameFetcher.data && (
+          <Banner tone="critical">{renameFetcher.data.error}</Banner>
+        )}
+
+        {renameFetcher.data && "success" in renameFetcher.data && renameFetcher.data.success && (
+          <Banner tone="success">Matrix name updated successfully</Banner>
+        )}
+
         {fetcher.data && "error" in fetcher.data && (
           <Banner tone="critical">{fetcher.data.error}</Banner>
         )}
