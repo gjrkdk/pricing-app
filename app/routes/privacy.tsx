@@ -92,8 +92,8 @@ export default function Privacy() {
             About This App
           </h2>
           <p style={{ marginBottom: "12px" }}>
-            Price Matrix is a Shopify app that enables merchants to offer
-            custom dimension-based pricing and option group selections on their
+            Price Matrix is a Shopify app that enables merchants to offer custom
+            dimension-based pricing and option group selections on their
             storefronts. This privacy policy explains how we collect, use, and
             protect your data.
           </p>
@@ -106,10 +106,10 @@ export default function Privacy() {
           <p style={{ marginBottom: "12px" }}>
             <strong>Contact Email:</strong>{" "}
             <a
-              href="mailto:robinkonijnendijk@gmail.com"
+              href="mailto:robin@boldinnovations.io"
               style={{ color: "#0070f3", textDecoration: "none" }}
             >
-              robinkonijnendijk@gmail.com
+              robin@boldinnovations.io
             </a>
           </p>
         </section>
@@ -179,8 +179,8 @@ export default function Privacy() {
               permanently in our database)
             </li>
             <li style={{ marginBottom: "8px" }}>
-              Option selections for pricing calculations (not stored
-              permanently in our database)
+              Option selections for pricing calculations (not stored permanently
+              in our database)
             </li>
             <li style={{ marginBottom: "8px" }}>
               Draft order data passed to Shopify (stored in Shopify's systems,
@@ -245,8 +245,8 @@ export default function Privacy() {
               product assignments).
             </li>
             <li style={{ marginBottom: "8px" }}>
-              <strong>Shopify:</strong> Platform provider. We use Shopify's
-              APIs to create draft orders, access product data, and authenticate
+              <strong>Shopify:</strong> Platform provider. We use Shopify's APIs
+              to create draft orders, access product data, and authenticate
               merchant sessions.
             </li>
           </ul>
@@ -331,10 +331,10 @@ export default function Privacy() {
           <p style={{ marginBottom: "12px" }}>
             To exercise any of these rights, please contact us at{" "}
             <a
-              href="mailto:robinkonijnendijk@gmail.com"
+              href="mailto:robin@boldinnovations.io"
               style={{ color: "#0070f3", textDecoration: "none" }}
             >
-              robinkonijnendijk@gmail.com
+              robin@boldinnovations.io
             </a>
             . We will respond to your request within 30 days.
           </p>
@@ -409,10 +409,10 @@ export default function Privacy() {
           <p style={{ marginBottom: "8px" }}>
             <strong>Email:</strong>{" "}
             <a
-              href="mailto:robinkonijnendijk@gmail.com"
+              href="mailto:robin@boldinnovations.io"
               style={{ color: "#0070f3", textDecoration: "none" }}
             >
-              robinkonijnendijk@gmail.com
+              robin@boldinnovations.io
             </a>
           </p>
           <p style={{ marginBottom: "8px" }}>
